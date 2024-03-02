@@ -19,6 +19,9 @@ Motywacją do podjęcia tematyki chatowania była chęć zapoznania się z syste
 - Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
 - Implementacja logiki serwera obsługującej wiadomości w grupach.
 
+**Dostęp do starych wiadomości:**
+- Implementacja logiki serwera obsługującej dostęp do starych wiadomości bez wyszukiwania.
+
 **Wysyłanie powiadomień:**
 - Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
 - Implementacja wysyłania powiadomień do odpowiednich użytkowników.
@@ -57,10 +60,17 @@ Motywacją do podjęcia tematyki chatowania była chęć zapoznania się z syste
 - **Spring Security**: Zapewnia mechanizmy uwierzytelniania, autoryzacji i zarządzania sesjami dla aplikacji Spring.
 - **WebSocket**: Technologia do obsługi komunikacji w czasie rzeczywistym między klientem a serwerem.
 - **Server Sent Events**: Technologia do obsługi komunikacji jednostronnej, gdzie serwer wysyła powiadomienia do klienta.
-- **Hibernate (opcjonalnie)**: Biblioteka ORM do mapowania obiektowo-relacyjnego, która może być użyta w połączeniu z Spring Data do zarządzania danymi w bazie danych.
+- **NoSQL database**: Nierelacyjna baza danych typu document store do przechowywania wiadomości np. MongoDB.
+- **SQL database**: Relacyjna baza danych do przechowywania profili użytkowników, ustawienia profili, np. MySQL.
 - **Elastyczne wyszukiwarki (np. Elasticsearch)**: Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych konwersacjach
 
-## Licencja
+## Linki pomocnicze
+- https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372 (architektura)
+
+### Aktualne wyzwania
+- dobranie odpowiedniej technologii bazy danych do zapewnienia skalowalności i dostępności danych
+  
+### Licencja
 
 Ten projekt jest objęty licencją MIT - sprawdź plik `LICENSE` dla szczegółów.
 
