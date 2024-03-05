@@ -14,6 +14,11 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 ### Must-have:
 
+**Rejestracja oraz logowanie:**
+
+- Stworzenie formularzy rejestracji i logowania dla użytkowników.
+- Implementacja mechanizmów uwierzytelniania i autoryzacji użytkowników.
+
 **Chatowanie indywidualne:**
 
 - Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości prywatnych.
@@ -34,11 +39,6 @@ oraz poszerzenie wiedzy o Spring MVC.
 - Implementacja wysyłania powiadomień do odpowiednich użytkowników.
 
 ### Nice-to-have:
-
-**Rejestracja oraz logowanie:**
-
-- Stworzenie formularzy rejestracji i logowania dla użytkowników.
-- Implementacja mechanizmów uwierzytelniania i autoryzacji użytkowników.
 
 **Użytkownicy posiadający role na czatach:**
 
