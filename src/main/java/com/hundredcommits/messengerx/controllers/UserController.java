@@ -13,12 +13,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
 
@@ -32,19 +31,35 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping(path = "/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignupRequest signupRequest) {
-        if (userRepository.findByUsername(signupRequest.username()).isPresent()){
-            return new ResponseEntity<>("Error: Username is already taken", HttpStatus.BAD_REQUEST);
-        }
-
-        UserDTO registeredUser = userService.signUp(signupRequest);
-        if (registeredUser != null){
-            return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    @GetMapping(path = "/signup")
+    public String signupView() {
+        return "user/signup";
     }
+
+    @PostMapping(path = "/signup")
+    public String signUp(@ModelAttribute SignupRequest signupRequest, Model model) {
+        String signupError = null;
+        if (userRepository.findByUsername(signupRequest.username()).isPresent()){
+            signupError = "Username is already taken";
+        }
+
+        if (signupError == null){
+            UserDTO registeredUser = userService.signUp(signupRequest);
+            if (registeredUser != null) {
+                model.addAttribute("signupSuccess", true);
+                return "user/signup";
+            }
+        }
+
+        model.addAttribute("signupError", signupError);
+        return "user/signup";
+    }
+
+    @GetMapping(path = "/login")
+    public String loginView() {
+        return "user/login";
+    }
+
     @PostMapping(path = "/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -56,6 +71,7 @@ public class UserController {
 
         JwtInfoResponse jwtInfoResponse = userService.logIn(loginRequest);
         if (jwtInfoResponse != null){
+            System.out.println("logged in");
             return new ResponseEntity<>(jwtInfoResponse, HttpStatus.OK);
         }
 
