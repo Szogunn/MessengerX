@@ -39,8 +39,16 @@ public class UserController {
     @PostMapping(path = "/signup")
     public String signUp(@ModelAttribute SignupRequest signupRequest, Model model) {
         String signupError = null;
+        if (signupRequest == null){
+            signupError = "Credentials cannot be empty";
+        }
+
         if (userRepository.findByUsername(signupRequest.username()).isPresent()){
             signupError = "Username is already taken";
+        }
+
+        if (userRepository.findByEmail(signupRequest.email()).isPresent()){
+            signupError = "Email is already taken";
         }
 
         if (signupError == null){

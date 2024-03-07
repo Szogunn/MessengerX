@@ -8,32 +8,39 @@
 
     <title>Sign Up</title>
 </head>
-<body class="p-3 mb-2 bg-light text-black">
-<div class="container justify-content-center w-50 p-3" style="background-color: #eeeeee; margin-top: 5em;">
-
+<body>
+<div th:insert="~{parts/navigation::navigation}"></div>
+<div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
     <h1 class="display-5">Sign Up</h1>
     <form action="#" th:action="@{/user/signup}" method="POST">
         <div id="success-msg" th:if="${signupSuccess}" class="alert alert-dark">
-            You successfully signed up! Please continue to the <a id="login-link" th:href="@{user/login}">login</a> page.
+            You successfully signed up! Please continue to the <a id="login-link" th:href="@{user/login}">login</a>
+            page.
         </div>
         <div id="error-msg" th:if="${signupError}" class="alert alert-danger">
             <span th:text="${signupError}"></span>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputUsername">Username</label>
-                <input type="input" name="username" class="form-control" id="inputUsername" placeholder="Enter Username" maxlength="20" required>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword">Password</label>
-                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail">Email</label>
-                <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Enter email" maxlength="20" required>
-            </div>
+
+        <div class="form-group">
+            <label for="inputUsername">Username</label>
+            <input type="input" name="username" class="form-control" id="inputUsername" placeholder="Enter Username"
+                   maxlength="20" required>
         </div>
+        <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Enter Password"
+                   maxlength="20" required>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail">Email</label>
+            <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Enter email"
+                   maxlength="20" required>
+        </div>
+
         <button id="submit-button" type="submit" class="btn btn-primary">Sign Up</button>
+        <div class="form-group" style="margin-top: 0.5em;">
+            <label><a id="signup-link" th:href="@{/user/login}">Click here to log in</a></label>
+        </div>
     </form>
 </div>
 </body>
