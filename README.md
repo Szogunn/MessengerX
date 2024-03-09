@@ -75,6 +75,7 @@ oraz poszerzenie wiedzy o Spring MVC.
   konfigurowanie większości aspektów aplikacji.
 - **Spring Data**: Umożliwia łatwe dostarczanie warstwy dostępu do danych w aplikacjach Spring.
 - **Spring Security**: Zapewnia mechanizmy uwierzytelniania, autoryzacji i zarządzania sesjami dla aplikacji Spring.
+- **Spring MVC**: Architektura Model View Controller z wykorzystaniem biblioteki Springa 
 - **WebSocket**: Technologia do obsługi komunikacji w czasie rzeczywistym między klientem a serwerem.
 - **Server Sent Events**: Technologia do obsługi komunikacji jednostronnej, gdzie serwer wysyła powiadomienia do
   klienta.
