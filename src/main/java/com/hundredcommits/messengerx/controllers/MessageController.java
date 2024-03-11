@@ -23,6 +23,7 @@ public class MessageController {
     public void send(@Payload Message chatMessage) {
         Message savedMessage = messageService.save(chatMessage);
         NotificationDTO notification = new NotificationDTO(savedMessage.getId(), savedMessage.getSenderId());
-        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", notification);
+//        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/topic/messages", notification);
+        webSocket.convertAndSend("/topic/messages", notification);
     }
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaLeader.pl | development chat application</title>
+    <link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body onload="connect()">
+<div class="container">
+    <div class="hero-unit">
+        <div class="row-fluid">
+            <div class="offset4 span4">
+                <legend>JavaLeader.pl | development chat application</legend>
+                <div class="control-group">
+                    <span th:text="${T(com.hundredcommits.messengerx.utils.SecurityUtils).getAuthenticatedUsername()}" id="user2"></span>
+                </div>
+                <div class="control-group">
+                    <label>You message:</label>
+                    <input class="form-control" id="messageToSend" type="text"/><br>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="reponse"></div>
+</div>
+<script src="Chat.js"></script>
+<script src="Stomp.js"></script>
+</body>
+</html>
