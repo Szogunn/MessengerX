@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body onload="connect()">
+<div th:insert="~{parts/navigation::navigation}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Znajomi</h2>
+            <ul class="list-group">
+                <li th:each="friend : ${friends}" class="list-group-item">
+                    <a th:href="@{'/chat/' + ${friend}}" th:text="${friend}">Znajomy</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Obszar czatu -->
+        <div class="col-md-8">
+            <div th:replace="~{chat/chat::chat}"></div>
+        </div>
+    </div>
+</div>
+<script src="Chat.js"></script>
+<script src="Stomp.js"></script>
+</body>
+</html>

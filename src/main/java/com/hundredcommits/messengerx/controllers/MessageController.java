@@ -7,6 +7,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class MessageController {
@@ -23,7 +28,16 @@ public class MessageController {
     public void send(@Payload Message chatMessage) {
         Message savedMessage = messageService.save(chatMessage);
         NotificationDTO notification = new NotificationDTO(savedMessage.getId(), savedMessage.getSenderId());
-//        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/topic/messages", notification);
-        webSocket.convertAndSend("/topic/messages", notification);
+        webSocket.convertAndSendToUser(chatMessage.getSenderId(), "/queue/messages", notification);
+//        webSocket.convertAndSend("/topic/messages", notification);
+    }
+
+    @GetMapping("/chat/index")
+    public String index(Model model) {
+        // Pobierz listę znajomych z bazy danych lub innego źródła
+        List<String> friends = Arrays.asList("Znajomy 1", "Znajomy 2", "Znajomy 3");
+
+        model.addAttribute("friends", friends);
+        return "chat/index";
     }
 }

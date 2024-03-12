@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/home").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/user/login")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/chat/index", true)
                         .permitAll())
                 .logout(LogoutConfigurer::permitAll);
         http.authenticationProvider(authenticationProvider());
