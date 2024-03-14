@@ -1,3 +1,4 @@
+<!-- chat.html -->
 <div th:fragment="chat" >
     <div class="container">
         <div class="hero-unit">
@@ -10,15 +11,12 @@
                     <div class="control-group">
                         <input class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/><br>
                     </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-                        </div>
-                    </div>
+                </div>
+                <div class="span2">
+                    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
                 </div>
             </div>
         </div>
         <br>
-
     </div>
 </div>

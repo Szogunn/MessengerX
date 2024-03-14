@@ -16,8 +16,19 @@
             <ul class="list-group">
                 <li th:each="friend : ${friends}" class="list-group-item">
                     <a th:href="@{'/chat/' + ${friend}}" th:text="${friend}">Znajomy</a>
+                    <form th:action="@{js}" method="post" style="display: inline;">
+                        <input type="hidden" name="username" th:value="${friend}" />
+                        <button type="submit" class="btn btn-danger btn-sm">Usuń znajomego</button>
+                    </form>
                 </li>
             </ul>
+            <form action="#" th:action="@{js}" method="POST">
+                <div class="form-group">
+                    <label for="username">Dodaj znajomego:</label>
+                    <input type="input" class="form-control" name="username"  id="username" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </form>
         </div>
         <!-- Obszar czatu -->
         <div class="col-md-8">
@@ -25,7 +36,7 @@
         </div>
     </div>
 </div>
-<script src="Chat.js"></script>
-<script src="Stomp.js"></script>
+<script src="/js/Chat.js"></script>
+<script src="/js/Stomp.js"></script>
 </body>
 </html>

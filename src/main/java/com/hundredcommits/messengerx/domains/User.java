@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document
 public class User {
@@ -14,6 +16,7 @@ public class User {
     private String email;
     private LocalDate createdAt;
     private boolean active;
+    private Set<String> friends = new HashSet<>();
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -69,5 +72,13 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Set<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<String> friends) {
+        this.friends = friends;
     }
 }
