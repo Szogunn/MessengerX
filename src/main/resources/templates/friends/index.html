@@ -16,13 +16,13 @@
             <ul class="list-group">
                 <li th:each="friend : ${friends}" class="list-group-item">
                     <a th:href="@{'/chat/' + ${friend}}" th:text="${friend}">Znajomy</a>
-                    <form th:action="@{js}" method="post" style="display: inline;">
+                    <form th:action="@{/friends/remove}" method="post" style="display: inline;">
                         <input type="hidden" name="username" th:value="${friend}" />
                         <button type="submit" class="btn btn-danger btn-sm">Usuń znajomego</button>
                     </form>
                 </li>
             </ul>
-            <form action="#" th:action="@{js}" method="POST">
+            <form action="#" th:action="@{/friends/add}" method="POST">
                 <div class="form-group">
                     <label for="username">Dodaj znajomego:</label>
                     <input type="input" class="form-control" name="username"  id="username" required>
