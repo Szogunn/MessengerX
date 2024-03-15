@@ -1,5 +1,6 @@
 package com.hundredcommits.messengerx.utils;
 
+import com.hundredcommits.messengerx.domains.User;
 import com.hundredcommits.messengerx.jwt.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,17 +19,25 @@ public class SecurityUtils {
     }
 
     public static String getAuthenticatedUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl authenticatedUser = getAuthenticatedUser();
+        if (authenticatedUser != null){
+            return authenticatedUser.getUsername();
+        }
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        return null;
+    }
+
+    public static UserDetailsImpl getAuthenticatedUser(){
+        if (!isAuthenticated()){
             return null;
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetailsImpl) principal).getUsername();
+        if (principal instanceof UserDetailsImpl userDetails) {
+            return userDetails;
         }
 
-        return principal.toString();
+        return null;
     }
 }
