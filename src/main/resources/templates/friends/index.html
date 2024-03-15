@@ -6,7 +6,7 @@
     <title>Chat App</title>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
 </head>
-<body onload="connect()">
+<body>
 <div th:insert="~{parts/navigation::navigation}"></div>
 
 <div class="container">
@@ -15,7 +15,7 @@
             <h2>Znajomi</h2>
             <ul class="list-group">
                 <li th:each="friend : ${friends}" class="list-group-item">
-                    <a th:href="@{'/chat/' + ${friend}}" th:text="${friend}">Znajomy</a>
+                    <a href="#" th:attr="data-friend=${friend}" onclick="connect(this.getAttribute('data-friend'))" th:text="${friend}">Znajomy</a>
                     <form th:action="@{/friends/remove}" method="post" style="display: inline;">
                         <input type="hidden" name="username" th:value="${friend}" />
                         <button type="submit" class="btn btn-danger btn-sm">Usuń znajomego</button>

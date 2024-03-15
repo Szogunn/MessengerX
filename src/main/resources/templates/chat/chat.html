@@ -1,5 +1,5 @@
 <!-- chat.html -->
-<div th:fragment="chat" >
+<div th:fragment="chat" xmlns="http://www.w3.org/1999/html">
     <div class="container">
         <div class="hero-unit">
             <div class="row-fluid">
@@ -9,7 +9,9 @@
                     </div>
                     <div id="reponse"></div>
                     <div class="control-group">
-                        <input class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/><br>
+                        <label for="messageToSend"></label>
+                        <input class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/>
+                        <br>
                     </div>
                 </div>
                 <div class="span2">
