@@ -1,5 +1,6 @@
 package com.hundredcommits.messengerx.service;
 
+import com.hundredcommits.messengerx.domains.User;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
@@ -13,7 +14,7 @@ public interface UserService {
     UserDTO signUp(SignupRequest signupRequest);
     JwtInfoResponse logIn(LoginRequest loginRequest);
     Set<String> findUserFriendsName(String username);
-    UserDTO findUserByUsername(String username);
+    User findUserByUsername(String username);
     boolean addFriend(String username, List<String> exceptions);
     boolean removeFriend(String username, List<String> exceptions);
 }

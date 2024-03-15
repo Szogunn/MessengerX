@@ -54,28 +54,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(user1 -> new UserDTO(user1.getUsername()))
-                .orElse(null);
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     @Override
     public boolean addFriend(String username, List<String> exceptions) {
-        UserDTO friend = findUserByUsername(username);
+        User friend = findUserByUsername(username);
         if (friend == null){
             exceptions.add(String.format("Użytkownik o nazwie %s nie został znaleziony", username));
             return false;
         }
 
         Optional<User> authenticatedUser = userRepository.findByUsername(SecurityUtils.getAuthenticatedUsername());
-        if (authenticatedUser.isEmpty() || friend.username().equals(authenticatedUser.get().getUsername())) {
+        if (authenticatedUser.isEmpty() || friend.getUsername().equals(authenticatedUser.get().getUsername())) {
             exceptions.add("Błąd");
             return false;
         }
 
-        authenticatedUser.get().getFriends().add(friend.username());
-        userRepository.save(authenticatedUser.get());
+        User user = authenticatedUser.get();
+        user.getFriends().add(friend.getUsername());
+        friend.getFriends().add(user.getUsername());
+        try {
+            userRepository.saveAll(Set.of(user, friend));
+        } catch (Exception ex){
+            return false;
+        }
+
         return true;
     }
 
@@ -87,10 +92,16 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
+        User friend = findUserByUsername(username);
+        if (friend == null){
+            return false;
+        }
+
         User user = authenticatedUser.get();
-        boolean removed = user.getFriends().removeIf(friendUsername -> friendUsername.equals(username));
-        if (removed){
-            userRepository.save(user);
+        boolean removedFromUserAuth = user.getFriends().removeIf(friendUsername -> friendUsername.equals(username));
+        boolean removedFromUserFriend = friend.getFriends().removeIf(friendUsername -> friendUsername.equals(user.getUsername()));
+        if (removedFromUserAuth && removedFromUserFriend){
+            userRepository.saveAll(Set.of(user,friend));
             return true;
         }
 
