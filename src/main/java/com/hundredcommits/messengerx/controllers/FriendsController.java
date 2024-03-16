@@ -1,5 +1,6 @@
 package com.hundredcommits.messengerx.controllers;
 
+import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
@@ -27,7 +28,7 @@ public class FriendsController {
     @GetMapping("")
     public String getFriends(Model model) {
         String username = SecurityUtils.getAuthenticatedUsername();
-        Set<String> friends = userService.findUserFriendsName(username);
+        Set<FriendStatus> friends = userService.findUserFriendsWithStatus(username);
 
         model.addAttribute("friends", friends);
         return "friends/index";

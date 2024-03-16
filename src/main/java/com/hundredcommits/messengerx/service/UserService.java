@@ -1,6 +1,7 @@
 package com.hundredcommits.messengerx.service;
 
 import com.hundredcommits.messengerx.domains.User;
+import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
@@ -17,4 +18,5 @@ public interface UserService {
     User findUserByUsername(String username);
     boolean addFriend(String username, List<String> exceptions);
     boolean removeFriend(String username, List<String> exceptions);
+    Set<FriendStatus> findUserFriendsWithStatus(String username);
 }

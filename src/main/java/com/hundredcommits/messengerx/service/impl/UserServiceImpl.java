@@ -1,6 +1,7 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.User;
+import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.jwt.JwtUtils;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
@@ -8,6 +9,7 @@ import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
 import com.hundredcommits.messengerx.repositories.UserRepository;
 import com.hundredcommits.messengerx.service.UserService;
+import com.hundredcommits.messengerx.utils.ActiveSessionManager;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,14 +17,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final ActiveSessionManager activeSessionManager;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public UserServiceImpl(ActiveSessionManager activeSessionManager, UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+        this.activeSessionManager = activeSessionManager;
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
@@ -106,5 +111,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public Set<FriendStatus> findUserFriendsWithStatus(String username) {
+        Set<String> userFriendsNames = findUserFriendsName(username);
+        Set<String> allActiveUsers = activeSessionManager.getAll();
+        return userFriendsNames.stream()
+                .map(name -> new FriendStatus(name, allActiveUsers.contains(name)))
+                .collect(Collectors.toSet());
     }
 }
