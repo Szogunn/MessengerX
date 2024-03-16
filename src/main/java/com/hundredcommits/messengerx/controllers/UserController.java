@@ -68,7 +68,7 @@ public class UserController {
         return "user/login";
     }
 
-    @PostMapping(path = "/login")
+    @PostMapping(path = "/login2")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
