@@ -8,6 +8,7 @@
 </head>
 <body>
 <div th:insert="~{parts/navigation::navigation}"></div>
+<input type="hidden" id="authenticated-username" th:value="${T(com.hundredcommits.messengerx.utils.SecurityUtils).getAuthenticatedUsername()}" />
 
 <div class="container">
     <div class="row">
@@ -18,8 +19,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <span th:text="${friend.username}" ></span>
-                            <span th:if="${friend.status}" class="badge bg-success ms-2">Online</span>
-                            <span th:unless="${friend.status}" class="badge bg-secondary ms-2">Offline</span>
+                            <span th:id="'status-' +${friend.username}" class="badge ms-2" th:classappend="${friend.status ? 'bg-success' : 'bg-secondary'}">
+                                <span th:if="${friend.status}">Online</span>
+                                <span th:unless="${friend.status}">Offline</span>
+                            </span>
                         </div>
                         <div>
                             <a href="#" th:attr="data-username=${friend.username}" onclick="connect(this.getAttribute('data-username'))" class="btn btn-primary btn-sm">Połącz</a>
@@ -45,38 +48,8 @@
         </div>
     </div>
 </div>
-<script src="/js/Chat.js"></script>
-<script src="/js/Stomp.js"></script>
-<script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        const eventSource = new EventSource('/notification/subscribe');
-        eventSource.addEventListener('Weronika', function(event) {
-            // Parsowanie otrzymanej wiadomości w formacie JSON
-            const eventData = JSON.parse(event.data);
-            if (eventData && eventData.type === 'USER_STATUS' && eventData.body && eventData.body.User && eventData.body.Online !== undefined) {
-                // Znalezienie elementu listy znajomych odpowiadającego zmienionemu użytkownikowi
-                const friendItem = document.querySelector(`li[data-username="${eventData.body.User}"]`);
-                console.log(friendItem)
-
-                // Jeśli znaleziono element i zmieniony status jest przeciwny do aktualnego statusu na stronie
-                if (friendItem && friendItem.querySelector('.badge').classList.contains('bg-success') !== eventData.body.Online) {
-                    // Zmiana klasy statusu na odpowiednią
-                    friendItem.querySelector('.badge').classList.toggle('bg-success');
-                    friendItem.querySelector('.badge').classList.toggle('bg-secondary');
-
-                    // Aktualizacja tekstu statusu
-                    const statusText = eventData.body.Online ? 'Online' : 'Offline';
-                    friendItem.querySelector('.badge').innerText = statusText;
-                }
-            }
-        });
-
-        // Obsługa zamknięcia EventSource w przypadku wystąpienia błędu
-        eventSource.addEventListener('error', function(error) {
-            console.error('EventSource encountered an error:', error);
-        });
-
-    });
-</script>
+<script src="/js/chat.js"></script>
+<script src="/js/stomp.js"></script>
+<script src="/js/friends-status.js"></script>
 </body>
 </html>

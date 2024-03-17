@@ -54,9 +54,9 @@ public class ActiveSessionManager implements NotificationService {
 
         Map<String, Object> body = new HashMap<>();
         String username = senderNotify.username();
-        body.put("User", username);
+        body.put("username", username);
         boolean online = getAll().contains(username);
-        body.put("Online", online);
+        body.put("online", online);
 
         Event event = new Event(Event.EventType.USER_STATUS, body);
         doSendNotification(senderNotify, event);
