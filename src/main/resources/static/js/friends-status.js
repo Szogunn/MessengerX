@@ -9,8 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    eventSource.addEventListener('error', function(error) {
-        console.error('EventSource encountered an error:', error);
+    eventSource.addEventListener('error', function(event) {
+        if (event.readyState === EventSource.CLOSED) {
+            console.log('connection is closed');
+        } else {
+            console.log("Error occured", event);
+        }
+        event.target.close();
     });
 });
 
