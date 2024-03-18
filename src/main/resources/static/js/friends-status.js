@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const authenticatedUsernameInput = document.getElementById('authenticated-username');
-    const username = authenticatedUsernameInput.value;
+    const username = document.getElementById('authenticated-username').innerText;
     const eventSource = new EventSource('/notification/subscribe');
     eventSource.addEventListener(username, function(event) {
         const eventData = JSON.parse(event.data);

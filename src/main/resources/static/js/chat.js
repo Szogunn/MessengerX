@@ -18,7 +18,7 @@ function showMessage(value, user) {
 
 function connect(username) {
     this.username = username
-    var user = document.getElementById('user').innerText;
+    var user = document.getElementById('authenticated-username').innerText;
     client = Stomp.client('ws://localhost:8080/chat');
     // client.connect({}, function (frame) {
     //     client.subscribe("/topic/messages", function(message){
@@ -34,7 +34,7 @@ function connect(username) {
 
 function sendMessage() {
     var messageToSend = document.getElementById('messageToSend').value;
-    var user = document.getElementById('user').innerText;
+    var user = document.getElementById('authenticated-username').innerText;
     const message = {
         conversationId: "",
         senderId: user,
