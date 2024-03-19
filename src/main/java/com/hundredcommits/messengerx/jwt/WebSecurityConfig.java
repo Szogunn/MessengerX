@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -51,15 +52,17 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> web.ignoring().requestMatchers("/css/**", "/js/**");
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(session -> session.maximumSessions(1)
                         .expiredUrl("/user/login?invalid-session=true")
                         .maxSessionsPreventsLogin(true))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/user/**").permitAll()
-                                .requestMatchers("/css/**", "/js/**").permitAll()
-                                .requestMatchers("/home").permitAll()
-                                .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/home").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/user/login")
                         .defaultSuccessUrl("/friends", true)
                         .permitAll())
