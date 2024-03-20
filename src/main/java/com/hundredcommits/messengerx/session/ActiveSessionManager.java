@@ -1,6 +1,5 @@
 package com.hundredcommits.messengerx.session;
 
-import com.hundredcommits.messengerx.dtos.UserWithFriendsDTO;
 import com.hundredcommits.messengerx.notification.StatusEvent;
 import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.notification.EventNotify;
@@ -29,14 +28,14 @@ public class ActiveSessionManager {
         this.map = new ConcurrentHashMap<>();
     }
 
-    public void add(UserWithFriendsDTO user) {
-        map.put(user.username(), PRESENT);
-        notifyFriendsAboutStatusChanged(user.username(), true);
+    public void add(String username) {
+        map.put(username, PRESENT);
+        notifyFriendsAboutStatusChanged(username, true);
     }
 
-    public void remove(UserWithFriendsDTO user) {
-        map.remove(user.username());
-        notifyFriendsAboutStatusChanged(user.username(), false);
+    public void remove(String username) {
+        map.remove(username);
+        notifyFriendsAboutStatusChanged(username, false);
     }
 
     public Set<String> getAll() {
