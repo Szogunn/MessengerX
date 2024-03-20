@@ -3,6 +3,7 @@ package com.hundredcommits.messengerx.controllers;
 import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.service.UserService;
+import com.hundredcommits.messengerx.session.ActiveSessionManager;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,15 +21,17 @@ import java.util.Set;
 public class FriendsController {
 
     private final UserService userService;
+    private final ActiveSessionManager activeSessionManager;
 
-    public FriendsController(UserService userService) {
+    public FriendsController(UserService userService, ActiveSessionManager activeSessionManager) {
         this.userService = userService;
+        this.activeSessionManager = activeSessionManager;
     }
 
     @GetMapping("")
     public String getFriends(Model model) {
         String username = SecurityUtils.getAuthenticatedUsername();
-        Set<FriendStatus> friends = userService.findUserFriendsWithStatus(username);
+        Set<FriendStatus> friends = activeSessionManager.findUserFriendsWithStatus(username);
 
         model.addAttribute("friends", friends);
         return "friends/index";
