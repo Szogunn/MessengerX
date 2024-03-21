@@ -19,12 +19,8 @@ function showMessage(value, user) {
 function connect(username) {
     this.username = username
     var user = document.getElementById('authenticated-username').innerText;
-    client = Stomp.client('ws://localhost:8080/chat');
-    // client.connect({}, function (frame) {
-    //     client.subscribe("/topic/messages", function(message){
-    //         showMessage(JSON.parse(message.body).id, JSON.parse(message.body).senderId)
-    //     });
-    // })
+    var socket = new SockJS('/chat');
+    client = Stomp.over(socket);
     client.connect({}, function (frame) {
         client.subscribe("/user/" + user + "/queue/messages", function(message){
             showMessage(JSON.parse(message.body).content, JSON.parse(message.body).senderId)
