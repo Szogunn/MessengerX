@@ -16,14 +16,13 @@
                 <li th:each="friend : ${friends}" class="list-group-item">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span th:text="${friend.username}" ></span>
+                            <span th:text="${friend.username}" onclick="handleClick(this)"></span>
                             <span th:id="'status-' +${friend.username}" class="badge ms-2" th:classappend="${friend.status ? 'bg-success' : 'bg-secondary'}">
                                 <span th:if="${friend.status}">Online</span>
                                 <span th:unless="${friend.status}">Offline</span>
                             </span>
                         </div>
                         <div>
-                            <a href="#" th:attr="data-username=${friend.username}" onclick="connect(this.getAttribute('data-username'))" class="btn btn-primary btn-sm">Połącz</a>
                             <form th:action="@{/friends/remove}" method="post" style="display: inline;">
                                 <input type="hidden" name="username" th:value="${friend.username}" />
                                 <button type="submit" class="btn btn-danger btn-sm">Usuń znajomego</button>
@@ -42,7 +41,24 @@
         </div>
         <!-- Obszar czatu -->
         <div class="col-md-8">
-            <div th:replace="~{chat/chat::chat}"></div>
+                <div class="container">
+                    <div class="hero-unit">
+                        <div class="row-fluid">
+                            <div class="offset4 span4">
+                                <div id="reponse"></div>
+                                <div class="control-group">
+                                    <label for="messageToSend"></label>
+                                    <input class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
         </div>
     </div>
 </div>

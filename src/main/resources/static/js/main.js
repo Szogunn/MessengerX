@@ -1,5 +1,5 @@
 var client = null;
-var username = null;
+var selectedUser = null;
 
 function showMessage(value, user) {
     var today    = new Date();
@@ -16,14 +16,24 @@ function showMessage(value, user) {
     respone.appendChild(newResponse);
 }
 
-function connect(username) {
-    this.username = username
+function connect() {
+    if (client){
+        console.log("Połączono już z serverem")
+        return
+    }
+
+    console.log("wywołano")
     var user = document.getElementById('authenticated-username').innerText;
     var socket = new SockJS('/chat');
     client = Stomp.over(socket);
     client.connect({}, function (frame) {
         client.subscribe("/user/" + user + "/queue/messages", function(message){
-            showMessage(JSON.parse(message.body).content, JSON.parse(message.body).senderId)
+            var parsedMessage = JSON.parse(message.body);
+            if (selectedUser && parsedMessage.senderId === selectedUser){
+                showMessage(parsedMessage.content, parsedMessage.senderId)
+            } else {
+                showNotification(parsedMessage.senderId);
+            }
         });
     })
 }
@@ -34,7 +44,7 @@ function sendMessage() {
     const message = {
         conversationId: "",
         senderId: user,
-        recipientId: this.username,
+        recipientId: selectedUser,
         content: messageToSend,
         timestamp: new Date().toISOString(),
     };
@@ -43,3 +53,19 @@ function sendMessage() {
     showMessage(message.content, message.senderId);
     document.getElementById('messageToSend').value = "";
 }
+
+function showNotification(senderId) {
+    alert("Nowa wiadomość od użytkownika: " + senderId);
+}
+
+function handleClick(element) {
+    selectedUser = element.innerText;
+    console.log('Username:', selectedUser);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    connect();
+});
+
+
+
