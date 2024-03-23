@@ -6,7 +6,7 @@
     <title>Chat App</title>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
 </head>
-<body>
+<body onload="connect()">
 <div th:insert="~{parts/navigation::navigation}"></div>
 <div class="container">
     <div class="row">
@@ -63,7 +63,6 @@
     </div>
 </div>
 <script src="/js/main.js"></script>
-<script src="/js/friends-status.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </body>

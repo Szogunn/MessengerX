@@ -1,5 +1,6 @@
 var client = null;
 var selectedUser = null;
+var eventSource = null;
 
 function showMessage(value, user) {
     var today    = new Date();
@@ -21,6 +22,8 @@ function connect() {
         console.log("Połączono już z serverem")
         return
     }
+
+    getFriends();
 
     console.log("wywołano")
     var user = document.getElementById('authenticated-username').innerText;
@@ -63,9 +66,44 @@ function handleClick(element) {
     console.log('Username:', selectedUser);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    connect();
-});
+function getFriends() {
+    const username = document.getElementById('authenticated-username').innerText;
+    console.log(eventSource)
+    if (eventSource){
+        console.log("zasubskrybowano już kanał")
+        return
+    }
 
+    eventSource = new EventSource('/notification/subscribe');
+    eventSource.addEventListener(username, function(event) {
+        const eventData = JSON.parse(event.data);
+        if (eventData.type === 'USER_STATUS') {
+            updateUserStatus(eventData.body.username, eventData.body.online);
+        }
+    });
+
+    eventSource.addEventListener('error', function(event) {
+        if (event.readyState === EventSource.CLOSED) {
+            console.log('connection is closed');
+        } else {
+            console.log("Error occured", event);
+        }
+        event.target.close();
+    });
+}
+
+function updateUserStatus(user, online) {
+    const statusSpan = document.getElementById('status-' + user);
+    if (statusSpan) {
+        statusSpan.classList.remove('bg-success', 'bg-secondary');
+        if (online) {
+            statusSpan.classList.add('bg-success');
+            statusSpan.textContent = 'Online';
+        } else {
+            statusSpan.classList.add('bg-secondary');
+            statusSpan.textContent = 'Offline';
+        }
+    }
+}
 
 
