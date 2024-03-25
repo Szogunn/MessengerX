@@ -34,31 +34,25 @@
             <form action="#" th:action="@{/friends/add}" method="POST">
                 <div class="form-group">
                     <label for="username">Dodaj znajomego:</label>
-                    <input type="input" class="form-control" name="username"  id="username" required>
+                    <input type="text" class="form-control" name="username" id="username" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Dodaj</button>
             </form>
         </div>
         <!-- Obszar czatu -->
         <div class="col-md-8">
-                <div class="container">
-                    <div class="hero-unit">
-                        <div class="row-fluid">
-                            <div class="offset4 span4">
-                                <div id="reponse"></div>
-                                <div class="control-group">
-                                    <label for="messageToSend"></label>
-                                    <input class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/>
-                                    <br>
-                                </div>
-                            </div>
-                            <div class="span2">
-                                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-                            </div>
+            <div class="container">
+                    <div id="reponse"></div>
+                    <form id="messageForm" name="messageForm" onsubmit="sendMessage();return false">
+                        <div class="control-group input-group">
+                            <label for="messageToSend"></label>
+                            <input autocomplete="off" class="form-control" id="messageToSend" type="text" placeholder="Wpisz wiadomość..."/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary">Send</button>
+                             </span>
                         </div>
-                    </div>
-                    <br>
-                </div>
+                    </form>
+            </div>
         </div>
     </div>
 </div>

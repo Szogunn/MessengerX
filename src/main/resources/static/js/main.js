@@ -25,7 +25,6 @@ function connect() {
 
     getFriends();
 
-    console.log("wywołano")
     var user = document.getElementById('authenticated-username').innerText;
     var socket = new SockJS('/chat');
     client = Stomp.over(socket);
@@ -41,7 +40,9 @@ function connect() {
     })
 }
 
-function sendMessage() {
+function sendMessage(event) {
+    event.preventDefault()
+
     var messageToSend = document.getElementById('messageToSend').value;
     var user = document.getElementById('authenticated-username').innerText;
     const message = {
