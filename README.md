@@ -79,8 +79,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 - **WebSocket**: Technologia do obsługi komunikacji w czasie rzeczywistym między klientem a serwerem.
 - **Server Sent Events**: Technologia do obsługi komunikacji jednostronnej, gdzie serwer wysyła powiadomienia do
   klienta.
-- **NoSQL database**: Nierelacyjna baza danych typu document store do przechowywania wiadomości np. MongoDB.
-- **SQL database**: Relacyjna baza danych do przechowywania profili użytkowników, ustawienia profili, np. MySQL.
+- **NoSQL database**: Nierelacyjna baza danych typu document store do przechowywania danych np. MongoDB.
 - **Thymeleaf**: Prosta warstwa fronentdowa z wykozrystaniem silnika thymeleaf
 - **Elastyczne wyszukiwarki (np. Elasticsearch)**: Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych
   konwersacjach
@@ -88,14 +87,6 @@ oraz poszerzenie wiedzy o Spring MVC.
 ## Linki pomocnicze
 
 - https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372 (architektura)
-- https://www.callicoder.com/spring-boot-websocket-chat-example/
-- https://javaleader.pl/2019/10/09/chat-w-spring-boot/
-- https://www.thetechplatform.com/post/building-persistable-one-to-one-chat-application-using-spring-boot-and-websockets
-
-### Aktualne wyzwania
-
-- dobranie odpowiedniej technologii bazy danych do zapewnienia skalowalności i dostępności
-  danych (https://stackoverflow.com/questions/44507705/spring-boot-connect-mysql-and-mongodb)
 
 ### Licencja
 
