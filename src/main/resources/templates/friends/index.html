@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
 </head>
 <body onload="connect()">
 <div th:insert="~{parts/navigation::navigation}"></div>
@@ -42,7 +43,7 @@
         <!-- Obszar czatu -->
         <div class="col-md-8">
             <div class="container">
-                    <div id="reponse"></div>
+                    <div id="response"></div>
                     <form id="messageForm" name="messageForm" onsubmit="sendMessage();return false">
                         <div class="control-group input-group">
                             <label for="messageToSend"></label>

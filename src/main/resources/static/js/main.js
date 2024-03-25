@@ -1,5 +1,6 @@
 var client = null;
 var selectedUser = null;
+var nickname = null;
 var eventSource = null;
 
 function showMessage(value, user) {
@@ -13,8 +14,22 @@ function showMessage(value, user) {
     newResponse.appendChild(document.createTextNode(user));
     newResponse.appendChild(document.createTextNode(" : "));
     newResponse.appendChild(document.createTextNode(value));
-    var respone = document.getElementById('reponse');
+    var respone = document.getElementById('response');
     respone.appendChild(newResponse);
+}
+
+function displayMessage(senderId, content) {
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message');
+    if (senderId === nickname) {
+        messageContainer.classList.add('sender');
+    } else {
+        messageContainer.classList.add('receiver');
+    }
+    const message = document.createElement('p');
+    message.textContent = content;
+    messageContainer.appendChild(message);
+    chatArea.appendChild(messageContainer);
 }
 
 function connect() {
@@ -22,14 +37,14 @@ function connect() {
         console.log("Połączono już z serverem")
         return
     }
+    nickname = document.getElementById('authenticated-username').innerText;
 
     getFriends();
 
-    var user = document.getElementById('authenticated-username').innerText;
     var socket = new SockJS('/chat');
     client = Stomp.over(socket);
     client.connect({}, function (frame) {
-        client.subscribe("/user/" + user + "/queue/messages", function(message){
+        client.subscribe("/user/" + nickname + "/queue/messages", function(message){
             var parsedMessage = JSON.parse(message.body);
             if (selectedUser && parsedMessage.senderId === selectedUser){
                 showMessage(parsedMessage.content, parsedMessage.senderId)
@@ -40,14 +55,12 @@ function connect() {
     })
 }
 
-function sendMessage(event) {
-    event.preventDefault()
+function sendMessage() {
 
     var messageToSend = document.getElementById('messageToSend').value;
-    var user = document.getElementById('authenticated-username').innerText;
     const message = {
         conversationId: "",
-        senderId: user,
+        senderId: nickname,
         recipientId: selectedUser,
         content: messageToSend,
         timestamp: new Date().toISOString(),
@@ -68,15 +81,9 @@ function handleClick(element) {
 }
 
 function getFriends() {
-    const username = document.getElementById('authenticated-username').innerText;
-    console.log(eventSource)
-    if (eventSource){
-        console.log("zasubskrybowano już kanał")
-        return
-    }
 
     eventSource = new EventSource('/notification/subscribe');
-    eventSource.addEventListener(username, function(event) {
+    eventSource.addEventListener(nickname, function(event) {
         const eventData = JSON.parse(event.data);
         if (eventData.type === 'USER_STATUS') {
             updateUserStatus(eventData.body.username, eventData.body.online);
