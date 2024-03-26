@@ -6,6 +6,8 @@ import com.hundredcommits.messengerx.service.ConversationService;
 import com.hundredcommits.messengerx.service.MessageService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -27,5 +29,11 @@ public class MessageServiceImpl implements MessageService {
                 .orElseThrow();
         message.setConversationId(conversationId);
         return messageRepository.save(message);
+    }
+
+    @Override
+    public List<Message> findChatMessages(String senderId, String recipientId) {
+        var conversationId = conversationService.getConversationId(senderId, recipientId, false);
+        return conversationId.map(messageRepository::findByConversationId).orElse(List.of());
     }
 }

@@ -5,15 +5,20 @@ import com.hundredcommits.messengerx.dtos.NotificationDTO;
 import com.hundredcommits.messengerx.jwt.UserDetailsImpl;
 import com.hundredcommits.messengerx.service.MessageService;
 import com.hundredcommits.messengerx.utils.AppUtil;
+import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -55,5 +60,12 @@ public class MessageController {
         NotificationDTO notification = new NotificationDTO(savedMessage.getContent(), savedMessage.getSenderId());
         webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", notification);
 //        webSocket.convertAndSend("/topic/messages", notification);
+    }
+
+    @GetMapping("/messages/{recipientId}")
+    public ResponseEntity<List<Message>> findPageableChatMessages(Pageable pageable, @PathVariable String recipientId){
+        String senderId = SecurityUtils.getAuthenticatedUsername();
+        List<Message> messages = messageService.findChatMessages(senderId, recipientId);
+        return ResponseEntity.ok(messages);
     }
 }

@@ -3,33 +3,25 @@ var selectedUser = null;
 var nickname = null;
 var eventSource = null;
 
+var chatArea = document.getElementById('chat-area');
 function showMessage(value, user) {
     var today    = new Date();
     var date     = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time     = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
 
-    var newResponse = document.createElement('p');
-    newResponse.appendChild(document.createTextNode("[" + dateTime + "] "));
-    newResponse.appendChild(document.createTextNode(user));
-    newResponse.appendChild(document.createTextNode(" : "));
-    newResponse.appendChild(document.createTextNode(value));
-    var respone = document.getElementById('response');
-    respone.appendChild(newResponse);
-}
-
-function displayMessage(senderId, content) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
-    if (senderId === nickname) {
+    if (user === nickname) {
         messageContainer.classList.add('sender');
     } else {
         messageContainer.classList.add('receiver');
     }
-    const message = document.createElement('p');
-    message.textContent = content;
-    messageContainer.appendChild(message);
+    var newResponse = document.createElement('p');
+    newResponse.textContent = value;
+    messageContainer.appendChild(newResponse)
     chatArea.appendChild(messageContainer);
+    chatArea.scrollTop = chatArea.scrollHeight;
 }
 
 function connect() {
@@ -77,6 +69,7 @@ function showNotification(senderId) {
 
 function handleClick(element) {
     selectedUser = element.innerText;
+    fetchAndDisplayUserChat().then();
     console.log('Username:', selectedUser);
 }
 
@@ -112,6 +105,15 @@ function updateUserStatus(user, online) {
             statusSpan.textContent = 'Offline';
         }
     }
+}
+
+async function fetchAndDisplayUserChat() {
+    const userChatResponse = await fetch(`/messages/${selectedUser}`);
+    const userChat = await userChatResponse.json();
+    chatArea.innerHTML = '';
+    userChat.forEach(chat => {
+        showMessage(chat.content, chat.senderId);
+    });
 }
 
 

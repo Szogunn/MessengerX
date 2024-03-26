@@ -1,6 +1,31 @@
-#response {
+#chat-area {
     height: 80vh;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     padding: 20px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 }
 
+.message {
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.sender {
+    background-color: #3498db;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.receiver {
+    background-color: #ecf0f1;
+    color: #333;
+    align-self: flex-start;
+}
+
+.message p {
+    padding: 0 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+}
