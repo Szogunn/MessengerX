@@ -7,7 +7,6 @@ import com.hundredcommits.messengerx.service.MessageService;
 import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -63,7 +62,7 @@ public class MessageController {
     }
 
     @GetMapping("/messages/{recipientId}")
-    public ResponseEntity<List<Message>> findPageableChatMessages(Pageable pageable, @PathVariable String recipientId){
+    public ResponseEntity<List<Message>> findChatMessages(@PathVariable String recipientId){
         String senderId = SecurityUtils.getAuthenticatedUsername();
         List<Message> messages = messageService.findChatMessages(senderId, recipientId);
         return ResponseEntity.ok(messages);
