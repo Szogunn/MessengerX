@@ -1,12 +1,15 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.Message;
+import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
 import com.hundredcommits.messengerx.repositories.MessageRepository;
 import com.hundredcommits.messengerx.service.ConversationService;
 import com.hundredcommits.messengerx.service.MessageService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -32,8 +35,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> findChatMessages(String senderId, String recipientId) {
+    public MessagesPageResponse findChatMessages(String senderId, String recipientId, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.Direction.DESC, "timestamp");
         var conversationId = conversationService.getConversationId(senderId, recipientId, false);
-        return conversationId.map(messageRepository::findByConversationId).orElse(List.of());
+        if (conversationId.isEmpty()){
+            return MessagesPageResponse.EMPTY_RESPONSE;
+        }
+
+        Page<Message> messages = messageRepository.findByConversationId(conversationId.get(), pageable);
+        return new MessagesPageResponse(messages.getContent(), pageable.getPageNumber(), pageable.getPageSize(), messages.getTotalElements(), messages.getTotalPages(), messages.isLast());
     }
 }

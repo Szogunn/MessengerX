@@ -3,6 +3,7 @@ package com.hundredcommits.messengerx.controllers;
 import com.hundredcommits.messengerx.domains.Message;
 import com.hundredcommits.messengerx.dtos.NotificationDTO;
 import com.hundredcommits.messengerx.jwt.UserDetailsImpl;
+import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
 import com.hundredcommits.messengerx.service.MessageService;
 import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
@@ -16,8 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -58,13 +59,13 @@ public class MessageController {
         Message savedMessage = messageService.save(chatMessage);
         NotificationDTO notification = new NotificationDTO(savedMessage.getContent(), savedMessage.getSenderId());
         webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", notification);
-//        webSocket.convertAndSend("/topic/messages", notification);
     }
 
     @GetMapping("/messages/{recipientId}")
-    public ResponseEntity<List<Message>> findChatMessages(@PathVariable String recipientId){
+    public ResponseEntity<MessagesPageResponse> findChatMessages(@PathVariable String recipientId, @RequestParam int pageNo, @RequestParam int pageSize){
         String senderId = SecurityUtils.getAuthenticatedUsername();
-        List<Message> messages = messageService.findChatMessages(senderId, recipientId);
+        MessagesPageResponse messages = messageService.findChatMessages(senderId, recipientId, pageNo, pageSize);
+
         return ResponseEntity.ok(messages);
     }
 }

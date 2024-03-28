@@ -2,14 +2,12 @@ var client = null;
 var selectedUser = null;
 var nickname = null;
 var eventSource = null;
+var currentPage = 0;
+var totalPage = 0;
 
 var chatArea = document.getElementById('chat-area');
-function showMessage(value, user) {
-    var today    = new Date();
-    var date     = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time     = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
 
+function showMessage(value, user, prepend) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
     if (user === nickname) {
@@ -17,11 +15,18 @@ function showMessage(value, user) {
     } else {
         messageContainer.classList.add('receiver');
     }
+
     var newResponse = document.createElement('p');
     newResponse.textContent = value;
+
     messageContainer.appendChild(newResponse)
-    chatArea.appendChild(messageContainer);
-    chatArea.scrollTop = chatArea.scrollHeight;
+    if (prepend) {
+        chatArea.prepend(messageContainer);
+        chatArea.scrollBy(0, 1);
+    } else {
+        chatArea.appendChild(messageContainer);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
 }
 
 function connect() {
@@ -35,11 +40,11 @@ function connect() {
 
     var socket = new SockJS('/chat');
     client = Stomp.over(socket);
-    client.connect({}, function (frame) {
+    client.connect({}, function () {
         client.subscribe("/user/" + nickname + "/queue/messages", function(message){
             var parsedMessage = JSON.parse(message.body);
             if (selectedUser && parsedMessage.senderId === selectedUser){
-                showMessage(parsedMessage.content, parsedMessage.senderId)
+                showMessage(parsedMessage.content, parsedMessage.senderId, false)
             } else {
                 showNotification(parsedMessage.senderId);
             }
@@ -59,7 +64,7 @@ function sendMessage() {
     };
 
     client.send("/app/chat", {}, JSON.stringify(message));
-    showMessage(message.content, message.senderId);
+    showMessage(message.content, message.senderId, false);
     document.getElementById('messageToSend').value = "";
 }
 
@@ -68,22 +73,24 @@ function showNotification(senderId) {
 }
 
 function handleClick(element) {
+    currentPage = 0;
     selectedUser = element.innerText;
-    fetchAndDisplayUserChat().then();
+    chatArea.innerHTML = '';
+    fetchAndDisplayUserChat(20).then();
     console.log('Username:', selectedUser);
 }
 
 function getFriends() {
 
     eventSource = new EventSource('/notification/subscribe');
-    eventSource.addEventListener(nickname, function(event) {
+    eventSource.addEventListener(nickname, function (event) {
         const eventData = JSON.parse(event.data);
         if (eventData.type === 'USER_STATUS') {
             updateUserStatus(eventData.body.username, eventData.body.online);
         }
     });
 
-    eventSource.addEventListener('error', function(event) {
+    eventSource.addEventListener('error', function (event) {
         if (event.readyState === EventSource.CLOSED) {
             console.log('connection is closed');
         } else {
@@ -107,13 +114,24 @@ function updateUserStatus(user, online) {
     }
 }
 
-async function fetchAndDisplayUserChat() {
-    const userChatResponse = await fetch(`/messages/${selectedUser}`);
+async function fetchAndDisplayUserChat(pageSize) {
+    const userChatResponse = await fetch(`/messages/${selectedUser}?pageNo=${currentPage}&pageSize=${pageSize}`);
     const userChat = await userChatResponse.json();
-    chatArea.innerHTML = '';
-    userChat.forEach(chat => {
-        showMessage(chat.content, chat.senderId);
+    userChat.content.forEach(chat => {
+        showMessage(chat.content, chat.senderId, true);
     });
+
+    totalPage = userChat.totalPages;
+    if (currentPage <= totalPage){
+        currentPage++
+        console.log(currentPage)
+    }
 }
+
+chatArea.addEventListener('scroll', function () {
+    if (chatArea.scrollTop === 0) {
+        fetchAndDisplayUserChat(10).then()
+    }
+});
 
 
