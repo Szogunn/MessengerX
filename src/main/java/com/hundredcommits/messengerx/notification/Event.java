@@ -12,6 +12,7 @@ public abstract class Event {
     }
 
     public enum EventType {
-        USER_STATUS
+        USER_STATUS,
+        FRIEND_REQUEST,
     }
 }
