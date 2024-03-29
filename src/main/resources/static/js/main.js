@@ -36,7 +36,7 @@ function connect() {
     }
     nickname = document.getElementById('authenticated-username').innerText;
 
-    getFriends();
+    subscribeToNotifications();
 
     var socket = new SockJS('/chat');
     client = Stomp.over(socket);
@@ -80,13 +80,13 @@ function handleClick(element) {
     console.log('Username:', selectedUser);
 }
 
-function getFriends() {
+function subscribeToNotifications() {
 
     eventSource = new EventSource('/notification/subscribe');
     eventSource.addEventListener(nickname, function (event) {
         const eventData = JSON.parse(event.data);
         if (eventData.type === 'USER_STATUS') {
-            updateUserStatus(eventData.body.username, eventData.body.online);
+            updateUserStatus(eventData.username, eventData.online);
         }
     });
 

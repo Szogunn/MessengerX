@@ -7,7 +7,6 @@ import com.hundredcommits.messengerx.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,15 +42,13 @@ public class ActiveSessionManager {
     }
 
     private void notifyFriendsAboutStatusChanged(String username, boolean online) {
-        Set<String> onlineFriendsNames = findUserFriendsWithStatus(username).stream()
+        Set<String> onlineFriendsNames = findUserFriendsWithStatus(username)
+                .stream()
                 .filter(FriendStatus::status)
                 .map(FriendStatus::username)
                 .collect(Collectors.toSet());
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("username", username);
-        body.put("online", online);
-        StatusEvent event = new StatusEvent(body);
+        StatusEvent event = new StatusEvent(username, online);
         eventNotify.notify(username, onlineFriendsNames, event);
     }
 
