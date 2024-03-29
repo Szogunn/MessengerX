@@ -88,7 +88,29 @@ function subscribeToNotifications() {
         if (eventData.type === 'USER_STATUS') {
             updateUserStatus(eventData.username, eventData.online);
         }
+
+        if (eventData.type === 'FRIEND_REQUEST') {
+            addFriendInvitationNotificationToList(eventData.username);
+            updateNotificationBadge(+1);
+        }
     });
+
+    function addFriendInvitationNotificationToList(notification) {
+        const newNotification = document.createElement('a');
+        newNotification.classList.add('dropdown-item');
+        newNotification.href = '#';
+        const statement= "Otrzymano zaproszenie do znajomych od ";
+        newNotification.textContent = statement + notification;
+        const notificationList = document.getElementById('notificationList');
+        notificationList.appendChild(newNotification);
+    }
+
+    function updateNotificationBadge(change) {
+        const notificationBadge = document.getElementById('notificationBadge');
+        let currentCount = parseInt(notificationBadge.textContent);
+        currentCount += change;
+        notificationBadge.textContent = currentCount;
+    }
 
     eventSource.addEventListener('error', function (event) {
         if (event.readyState === EventSource.CLOSED) {

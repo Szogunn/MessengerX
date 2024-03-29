@@ -20,6 +20,7 @@ import java.util.Set;
 @RequestMapping("/friends")
 public class FriendsController {
 
+    public static final String REDIRECT_FRIENDS = "redirect:/friends";
     private final UserService userService;
     private final ActiveSessionManager activeSessionManager;
 
@@ -46,7 +47,7 @@ public class FriendsController {
             model.addAttribute("exceptions", exceptions);
         }
 
-        return "redirect:/friends";
+        return REDIRECT_FRIENDS;
     }
 
     @PostMapping("/remove")
@@ -58,6 +59,13 @@ public class FriendsController {
             model.addAttribute("exceptions", exceptions);
         }
 
-        return "redirect:/friends";
+        return REDIRECT_FRIENDS;
+    }
+
+    @PostMapping("/invite")
+    public String inviteFriend(@ModelAttribute UserDTO userDTO) {
+        userService.inviteFriend(userDTO.username());
+
+        return REDIRECT_FRIENDS;
     }
 }

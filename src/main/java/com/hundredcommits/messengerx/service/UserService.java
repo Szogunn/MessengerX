@@ -16,5 +16,6 @@ public interface UserService {
     Set<String> findUserFriendsName(String username);
     User findUserByUsername(String username);
     boolean addFriend(String username, List<String> exceptions);
+    void inviteFriend(String username);
     boolean removeFriend(String username, List<String> exceptions);
 }

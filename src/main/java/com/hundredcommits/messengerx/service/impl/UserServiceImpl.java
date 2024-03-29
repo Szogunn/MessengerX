@@ -3,6 +3,9 @@ package com.hundredcommits.messengerx.service.impl;
 import com.hundredcommits.messengerx.domains.User;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.jwt.JwtUtils;
+import com.hundredcommits.messengerx.notification.EventNotify;
+import com.hundredcommits.messengerx.notification.FriendRequestEvent;
+import com.hundredcommits.messengerx.notification.NotificationExecutor;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
@@ -17,15 +20,18 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, EventNotify<FriendRequestEvent> {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    private final NotificationExecutor notificationExecutor;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils, NotificationExecutor notificationExecutor) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
+        this.notificationExecutor = notificationExecutor;
     }
 
     @Override
@@ -61,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addFriend(String username, List<String> exceptions) {
         User friend = findUserByUsername(username);
-        if (friend == null){
+        if (friend == null) {
             exceptions.add(String.format("Użytkownik o nazwie %s nie został znaleziony", username));
             return false;
         }
@@ -82,6 +88,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
+    }
+
+    @Override
+    public void inviteFriend(String username) {
+        String authUser = SecurityUtils.getAuthenticatedUsername();
+        FriendRequestEvent event = new FriendRequestEvent(username);
+        notify(authUser, Set.of(username), event);
     }
 
     @Override
@@ -106,5 +119,16 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public void notify(String senderNotify, Set<String> recipientsNames, FriendRequestEvent event) {
+        List<String> errors = notificationExecutor.notify(senderNotify, recipientsNames, event);
+
+        if (!errors.isEmpty()){
+            for (String string : errors) {
+                //todo: obsłużyć wyjątki powstałe podczas przesyłania eventów
+            }
+        }
     }
 }
