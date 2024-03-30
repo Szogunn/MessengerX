@@ -11,7 +11,9 @@ import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
 import com.hundredcommits.messengerx.repositories.UserRepository;
 import com.hundredcommits.messengerx.service.UserService;
+import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService, EventNotify<FriendRequestEvent> {
     private final UserRepository userRepository;
@@ -93,6 +96,11 @@ public class UserServiceImpl implements UserService, EventNotify<FriendRequestEv
     @Override
     public void inviteFriend(String username) {
         String authUser = SecurityUtils.getAuthenticatedUsername();
+        if (AppUtil.isEmpty(username) || username.equals(authUser)) {
+            log.warn("Provided name of user is empty or equals authenticated user name");
+            return;
+        }
+
         FriendRequestEvent event = new FriendRequestEvent(username);
         notify(authUser, Set.of(username), event);
     }
