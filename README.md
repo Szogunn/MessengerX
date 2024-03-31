@@ -7,7 +7,7 @@ Umożliwia tworzenie grup, wysyłanie powiadomień oraz organizowanie ankiet na 
 
 ## Motywacja
 
-Motywacją do podjęcia tematyki chatowania była chęć zapoznania się z systemami czasu rzeczywsitego jak WebSockets, SSE
+Motywacją do podjęcia tematyki chatowania jest chęć zapoznania się z systemami czasu rzeczywsitego jak WebSockets, SSE
 oraz poszerzenie wiedzy o Spring MVC.
 
 ## Funkcjonalności
@@ -16,75 +16,81 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 **Rejestracja oraz logowanie:**
 
-- Stworzenie formularzy rejestracji i logowania dla użytkowników.
-- Implementacja mechanizmów uwierzytelniania i autoryzacji użytkowników.
+- [X] Stworzenie formularzy rejestracji i logowania dla użytkowników.
+- [X] Implementacja mechanizmów uwierzytelniania i autoryzacji użytkowników.
 
 **Chatowanie indywidualne:**
 
-- Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości prywatnych.
-- Implementacja logiki serwera obsługującej wymianę wiadomości między użytkownikami.
+- [X] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości prywatnych.
+- [X] Implementacja logiki serwera obsługującej wymianę wiadomości między użytkownikami.
 
 **Chatowanie grupowe:**
 
-- Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
-- Implementacja logiki serwera obsługującej wiadomości w grupach.
+- [ ] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
+- [ ] Implementacja logiki serwera obsługującej wiadomości w grupach.
 
 **Dostęp do starych wiadomości:**
 
-- Implementacja logiki serwera obsługującej dostęp do starych wiadomości bez wyszukiwania.
+- [X] Implementacja logiki serwera obsługującej dostęp do starych wiadomości bez wyszukiwania.
 
 **Wysyłanie powiadomień:**
 
-- Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
-- Implementacja wysyłania powiadomień do odpowiednich użytkowników.
+- [ ] Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
+  -  [ ] Zaproszenie do znajmomych
+  -  [ ] Informacje o przyjęciu lub odrzuceniu zaproszenia
+  -  [X] Powiadomienie o zmianie statusu użytkownika 
+- [ ] Implementacja wysyłania powiadomień do odpowiednich użytkowników.
 
 ### Nice-to-have:
 
 **Użytkownicy posiadający role na czatach:**
 
-- Stworzenie mechanizmu nadawania i zarządzania rolami użytkowników w grupowych czatach.
-- Implementacja interfejsu administracyjnego do zarządzania rolami.
+- [ ] Stworzenie mechanizmu nadawania i zarządzania rolami użytkowników w grupowych czatach.
+- [ ] Implementacja interfejsu administracyjnego do zarządzania rolami.
 
 **Udostępnianie postów widocznych dla wszystkich:**
 
-- Implementacja możliwości tworzenia i udostępniania postów na czatach grupowych.
-- Stworzenie interfejsu użytkownika umożliwiającego udostępnianie postów.
+- [ ] Implementacja możliwości tworzenia i udostępniania postów na czatach grupowych.
+- [ ] Stworzenie interfejsu użytkownika umożliwiającego udostępnianie postów.
 
 **Tworzenie ankiet:**
 
-- Stworzenie interfejsu użytkownika do tworzenia ankiet na czatach grupowych.
-- Implementacja mechanizmu obsługi ankiet.
+- [ ] Stworzenie interfejsu użytkownika do tworzenia ankiet na czatach grupowych.
+- [ ] Implementacja mechanizmu obsługi ankiet.
 
 ### Dodatkowe:
 
 **Wyszukiwanie w starych konwersacjach:**
 
-- Implementacja funkcji wyszukiwania w archiwalnych rozmowach.
-- Stworzenie interfejsu użytkownika umożliwiającego wyszukiwanie w starych wiadomościach.
+- [ ] Implementacja funkcji wyszukiwania w archiwalnych rozmowach.
+- [ ] Stworzenie interfejsu użytkownika umożliwiającego wyszukiwanie w starych wiadomościach.
 
-**RabbitMQ:**
+**Zewnętrzny broker:**
 
-- Zaimplementowanie zewnętrznego brokerka jakim jest np. RabbitMQ.
+- [ ] Zaimplementowanie zewnętrznego brokerka (np. RabbitMQ, Kafka) do przetwarzania wiadomości.
+
+**Baza danych w pamięci:**
+
+- [ ] Zaimplementowanie bazy danych wykorzystujący mechanizm cacheowania(np. Redis), do przetrzymywania dynamicznych danych.
 
 ## Technologie
 
-- **Java**: Język programowania, w którym napisana będzie główna logika aplikacji.
-- **Spring Framework**: Framework do tworzenia aplikacji Java, który zapewnia wsparcie dla budowania aplikacji webowych,
-  obsługi żądań HTTP i zarządzania zależnościami.
-- **Spring Boot**: Ułatwia szybkie tworzenie aplikacji Spring, zapewniając konfigurację domyślną i automatyczne
+- [Java 21](https://openjdk.org/projects/jdk/21/) : Język programowania, w którym napisana będzie główna logika aplikacji.
+- [Maven](https://maven.apache.org/) : Automatyzacja budowy projektów opartych o język Java
+- [Spring Framework](https://spring.io/projects/spring-framework) : Framework do tworzenia aplikacji Java, który zapewnia wsparcie dla budowania aplikacji webowych, obsługi żądań HTTP i zarządzania zależnościami.
+- [Spring Boot 3](https://spring.io/projects/spring-boot) : Ułatwia szybkie tworzenie aplikacji Spring, zapewniając konfigurację domyślną i automatyczne
   konfigurowanie większości aspektów aplikacji.
-- **Spring Data**: Umożliwia łatwe dostarczanie warstwy dostępu do danych w aplikacjach Spring.
-- **Spring Security**: Zapewnia mechanizmy uwierzytelniania, autoryzacji i zarządzania sesjami dla aplikacji Spring.
-- **Spring MVC**: Architektura Model View Controller z wykorzystaniem biblioteki Springa 
-- **WebSocket**: Technologia do obsługi komunikacji w czasie rzeczywistym między klientem a serwerem.
-- **Server Sent Events**: Technologia do obsługi komunikacji jednostronnej, gdzie serwer wysyła powiadomienia do
+- [Spring Data](https://spring.io/projects/spring-data) : Umożliwia łatwe dostarczanie warstwy dostępu do danych w aplikacjach Spring.
+- [Spring Security](https://spring.io/projects/spring-security) : Zapewnia mechanizmy uwierzytelniania, autoryzacji i zarządzania sesjami dla aplikacji Spring.
+- [Spring Session](https://spring.io/projects/spring-session) : Wykorzystanie Spring Session do utrzymania sesji http dla protokołu **WebSocket** wykorzystywanego do komunikacji między klientem a serwerem w czasie rzeczywistym
+- [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/EventSource) : Technologia do obsługi komunikacji jednostronnej, gdzie serwer wysyła powiadomienia do
   klienta.
-- **NoSQL database**: Nierelacyjna baza danych typu document store do przechowywania danych np. MongoDB.
-- **Thymeleaf**: Prosta warstwa fronentdowa z wykozrystaniem silnika thymeleaf
-- **Elastyczne wyszukiwarki (np. Elasticsearch)**: Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych
+- [NoSQL database](https://www.mongodb.com): Nierelacyjna baza danych typu document store do przechowywania danych np. MongoDB.
+- [Thymeleaf](https://www.thymeleaf.org/) : Prosta warstwa fronentdowa z wykorzystaniem silnika Thymeleaf
+- [Wyszukiwarki (np. Elasticsearch)](https://www.elastic.co/) : Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych
   konwersacjach
 
-## Linki pomocnicze
+## Inspiracje
 
 - https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372 (architektura)
 
