@@ -38,8 +38,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 - [ ] Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
   -  [ ] Zaproszenie do znajmomych
   -  [ ] Informacje o przyjęciu lub odrzuceniu zaproszenia
-  -  [X] Powiadomienie o zmianie statusu użytkownika 
-- [ ] Implementacja wysyłania powiadomień do odpowiednich użytkowników.
+  -  [X] Powiadomienie o zmianie statusu użytkownika
 
 ### Nice-to-have:
 
