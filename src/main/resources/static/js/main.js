@@ -90,7 +90,7 @@ function subscribeToNotifications() {
         }
 
         if (eventData.type === 'FRIEND_REQUEST') {
-            addFriendInvitationNotificationToList(eventData.username);
+            addFriendInvitationNotificationToList(eventData.fromUser);
             updateNotificationBadge(+1);
         }
     });
@@ -98,7 +98,6 @@ function subscribeToNotifications() {
     function addFriendInvitationNotificationToList(notification) {
         const newNotification = document.createElement('a');
         newNotification.classList.add('dropdown-item');
-        newNotification.href = '#';
         const statement= "Otrzymano zaproszenie do znajomych od ";
         newNotification.textContent = statement + notification;
         const notificationList = document.getElementById('notificationList');

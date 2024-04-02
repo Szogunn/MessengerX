@@ -1,14 +1,20 @@
 package com.hundredcommits.messengerx.notification;
 
 public class FriendRequestEvent extends Event {
-    private final String username;
+    private final String fromUser;
+    private final String toUser;
 
-    public FriendRequestEvent(String username) {
+    public FriendRequestEvent(String fromUser, String toUser) {
         super(EventType.FRIEND_REQUEST);
-        this.username = username;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFromUser() {
+        return fromUser;
+    }
+
+    public String getToUser() {
+        return toUser;
     }
 }

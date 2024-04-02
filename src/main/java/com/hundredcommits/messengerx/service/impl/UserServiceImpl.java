@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, EventNotify<FriendRequestEv
             return;
         }
 
-        FriendRequestEvent event = new FriendRequestEvent(username);
+        FriendRequestEvent event = new FriendRequestEvent(authUser, username);
         notify(authUser, Set.of(username), event);
     }
 
