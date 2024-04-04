@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
+    public static final String USER_SIGNUP = "user/signup";
     private final UserService userService;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
@@ -33,7 +34,7 @@ public class UserController {
 
     @GetMapping(path = "/signup")
     public String signupView() {
-        return "user/signup";
+        return USER_SIGNUP;
     }
 
     @PostMapping(path = "/signup")
@@ -43,11 +44,11 @@ public class UserController {
             signupError = "Credentials cannot be empty";
         }
 
-        if (userRepository.findByUsername(signupRequest.username()).isPresent()){
+        if (signupRequest != null && userRepository.findByUsername(signupRequest.username()).isPresent()){
             signupError = "Username is already taken";
         }
 
-        if (userRepository.findByEmail(signupRequest.email()).isPresent()){
+        if (signupRequest != null && userRepository.findByEmail(signupRequest.email()).isPresent()){
             signupError = "Email is already taken";
         }
 
@@ -55,12 +56,12 @@ public class UserController {
             UserDTO registeredUser = userService.signUp(signupRequest);
             if (registeredUser != null) {
                 model.addAttribute("signupSuccess", true);
-                return "user/signup";
+                return USER_SIGNUP;
             }
         }
 
         model.addAttribute("signupError", signupError);
-        return "user/signup";
+        return USER_SIGNUP;
     }
 
     @GetMapping(path = "/login")
@@ -68,7 +69,7 @@ public class UserController {
         return "user/login";
     }
 
-    @PostMapping(path = "/login2")
+    @PostMapping(path = "/logWithJWT")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
@@ -79,12 +80,9 @@ public class UserController {
 
         JwtInfoResponse jwtInfoResponse = userService.logIn(loginRequest);
         if (jwtInfoResponse != null){
-            System.out.println("logged in");
             return new ResponseEntity<>(jwtInfoResponse, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Something went wrong!!!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }
