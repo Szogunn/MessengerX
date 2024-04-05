@@ -15,10 +15,11 @@ public class Message {
     private String content;
     private Date timestamp;
 
-    public Message(String conversationId, String senderId, String content) {
-        this.conversationId = conversationId;
+    public Message(String senderId, String recipientId, String content, Date timestamp) {
         this.senderId = senderId;
+        this.recipientId = recipientId;
         this.content = content;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
