@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Document
-public class Invitation {
+public class Invitation extends PersistentNotifyingEntity {
 
     @Id
     private String id;
@@ -17,12 +17,14 @@ public class Invitation {
     private Date responseDate;
 
     private Invitation() {
+        super(null);
         this.invitationDate = null;
         this.fromUser = null;
         this.toUser = null;
     }
 
     public Invitation(String fromUser, String toUser) {
+        super(toUser);
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.invitationDate = new Date(System.currentTimeMillis());
@@ -31,6 +33,7 @@ public class Invitation {
     }
 
     private Invitation(String id, String fromUser, String toUser, Date invitationDate, boolean accepted, Date responseDate) {
+        super(toUser);
         this.id = id;
         this.fromUser = fromUser;
         this.toUser = toUser;
@@ -74,9 +77,19 @@ public class Invitation {
 
         this.accepted = accepted;
         this.responseDate = new Date(System.currentTimeMillis());
+        this.setCompleted();
     }
 
     public Date getResponseDate() {
         return responseDate;
+    }
+
+    @Override
+    protected void setCompleted() {
+        if (this.responseDate != null){
+            return;
+        }
+
+        this.completed = true;
     }
 }

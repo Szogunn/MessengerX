@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Document
-public class Message {
+public class Message extends PersistentNotifyingEntity {
     @Id
     private String id;
     private String conversationId;
@@ -16,6 +16,7 @@ public class Message {
     private Date timestamp;
 
     public Message(String senderId, String recipientId, String content, Date timestamp) {
+        super(recipientId);
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.content = content;
@@ -68,5 +69,10 @@ public class Message {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    void setCompleted() {
+        //todo
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface InvitationRepository extends MongoRepository<Invitation, String> {
+public interface InvitationRepository extends MongoRepository<Invitation, String>, PersistentNotifyingEntityRepository<Invitation> {
 
     Optional<Invitation> findByFromUserAndToUser(String fromUser, String toUser);
 }
