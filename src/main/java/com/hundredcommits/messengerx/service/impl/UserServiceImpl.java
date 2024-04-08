@@ -1,6 +1,7 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.User;
+import com.hundredcommits.messengerx.dtos.InvitationDTO;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.jwt.JwtUtils;
 import com.hundredcommits.messengerx.notification.EventNotify;
@@ -10,6 +11,7 @@ import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
 import com.hundredcommits.messengerx.repositories.UserRepository;
+import com.hundredcommits.messengerx.service.InvitationService;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
@@ -25,13 +27,15 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService, EventNotify<FriendRequestEvent> {
     private final UserRepository userRepository;
+    private final InvitationService invitationService;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
     private final NotificationExecutor notificationExecutor;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils, NotificationExecutor notificationExecutor) {
+    public UserServiceImpl(UserRepository userRepository, InvitationService invitationService, PasswordEncoder encoder, JwtUtils jwtUtils, NotificationExecutor notificationExecutor) {
         this.userRepository = userRepository;
+        this.invitationService = invitationService;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.notificationExecutor = notificationExecutor;
@@ -101,8 +105,37 @@ public class UserServiceImpl implements UserService, EventNotify<FriendRequestEv
             return;
         }
 
-        FriendRequestEvent event = new FriendRequestEvent(authUser, username);
-        notify(authUser, Set.of(username), event);
+        InvitationDTO invitation = new InvitationDTO(authUser, username);
+        boolean saved = invitationService.saveInvitation(invitation);
+        if (saved) {
+            FriendRequestEvent event = new FriendRequestEvent(authUser, username);
+            notify(authUser, Set.of(username), event);
+        }
+    }
+
+    @Override
+    public boolean responseForInvitation(boolean isAccepted, String username) {
+        String authUserName = SecurityUtils.getAuthenticatedUsername();
+        InvitationDTO invitationDTO = new InvitationDTO(username, authUserName);
+        boolean isValid = invitationService.responseForInvitation(isAccepted, invitationDTO);
+
+        if (isValid) {
+//            userRepository.findByUsername(authUserName).ifPresent(user -> user.getFriends().add(username));
+//            userRepository.findByUsername(username).ifPresent(user -> user.getFriends().add(authUserName));
+//            todo: zaimplementować metodę którą przyjmuję Consumera jako funkcję i będzie zapisywała wynik działania jakim jest User do bazy danych
+            User friend = findUserByUsername(username);
+            User authenticatedUser = findUserByUsername(authUserName);
+            if (friend != null && authenticatedUser != null){
+                friend.getFriends().add(authUserName);
+                authenticatedUser.getFriends().add(username);
+                userRepository.saveAll(Set.of(friend, authenticatedUser));
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
     @Override

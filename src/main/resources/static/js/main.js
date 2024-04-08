@@ -56,7 +56,6 @@ function sendMessage() {
 
     var messageToSend = document.getElementById('messageToSend').value;
     const message = {
-        conversationId: "",
         senderId: nickname,
         recipientId: selectedUser,
         content: messageToSend,
@@ -95,22 +94,6 @@ function subscribeToNotifications() {
         }
     });
 
-    function addFriendInvitationNotificationToList(notification) {
-        const newNotification = document.createElement('a');
-        newNotification.classList.add('dropdown-item');
-        const statement= "Otrzymano zaproszenie do znajomych od ";
-        newNotification.textContent = statement + notification;
-        const notificationList = document.getElementById('notificationList');
-        notificationList.appendChild(newNotification);
-    }
-
-    function updateNotificationBadge(change) {
-        const notificationBadge = document.getElementById('notificationBadge');
-        let currentCount = parseInt(notificationBadge.textContent);
-        currentCount += change;
-        notificationBadge.textContent = currentCount;
-    }
-
     eventSource.addEventListener('error', function (event) {
         if (event.readyState === EventSource.CLOSED) {
             console.log('connection is closed');
@@ -119,6 +102,75 @@ function subscribeToNotifications() {
         }
         event.target.close();
     });
+}
+
+function addFriendInvitationNotificationToList(notification) {
+    const newNotification = document.createElement('div');
+    newNotification.classList.add('dropdown-item');
+
+    // Dodaj treść powiadomienia
+    const statement = document.createElement('span');
+    statement.textContent = "Otrzymano zaproszenie do znajomych od " + notification;
+
+    // Przycisk akceptacji
+    const acceptButton = document.createElement('button');
+    acceptButton.textContent = 'Akceptuj';
+    acceptButton.classList.add('btn', 'btn-success', 'mx-2');
+    acceptButton.addEventListener('click', function() {
+        sendResponseToServer(true, notification); // Wysyłanie akceptacji na serwer
+    });
+
+    // Przycisk odrzucenia
+    const rejectButton = document.createElement('button');
+    rejectButton.textContent = 'Odrzuć';
+    rejectButton.classList.add('btn', 'btn-danger');
+    rejectButton.addEventListener('click', function() {
+        sendResponseToServer(false, notification); // Wysyłanie odrzucenia na serwer
+    });
+
+    // Dodaj treść i przyciski do powiadomienia
+    newNotification.appendChild(statement);
+    newNotification.appendChild(acceptButton);
+    newNotification.appendChild(rejectButton);
+
+    const notificationList = document.getElementById('notificationList');
+    notificationList.appendChild(newNotification);
+}
+
+// Funkcja do wysyłania odpowiedzi na serwer
+function sendResponseToServer(isAccepted, username) {
+    console.log(isAccepted)
+    console.log(username)
+    fetch(`/friends/response/${isAccepted}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Obsługa odpowiedzi z serwera
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+}
+
+
+function updateNotificationBadge(change) {
+    const notificationBadge = document.getElementById('notificationBadge');
+    let currentCount = parseInt(notificationBadge.textContent);
+    currentCount += change;
+    notificationBadge.textContent = currentCount;
 }
 
 function updateUserStatus(user, online) {

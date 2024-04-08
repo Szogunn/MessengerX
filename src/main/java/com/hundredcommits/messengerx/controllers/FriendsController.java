@@ -5,12 +5,16 @@ import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.session.ActiveSessionManager;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,5 +71,13 @@ public class FriendsController {
         userService.inviteFriend(userDTO.username());
 
         return REDIRECT_FRIENDS;
+    }
+
+    @PostMapping("/response/{isAccepted}")
+    public ResponseEntity<Boolean> responseForInvitation(@PathVariable String isAccepted, @RequestBody UserDTO userDTO) {
+        boolean result = userService.responseForInvitation(Boolean.parseBoolean(isAccepted), userDTO.username());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+//        return REDIRECT_FRIENDS;
     }
 }

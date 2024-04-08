@@ -17,5 +17,6 @@ public interface UserService {
     User findUserByUsername(String username);
     boolean addFriend(String username, List<String> exceptions);
     void inviteFriend(String username);
+    boolean responseForInvitation(boolean isAccepted, String username);
     boolean removeFriend(String username, List<String> exceptions);
 }
