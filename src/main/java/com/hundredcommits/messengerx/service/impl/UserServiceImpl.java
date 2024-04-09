@@ -4,16 +4,12 @@ import com.hundredcommits.messengerx.domains.User;
 import com.hundredcommits.messengerx.dtos.InvitationDTO;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.jwt.JwtUtils;
-import com.hundredcommits.messengerx.notification.EventNotify;
-import com.hundredcommits.messengerx.notification.FriendRequestEvent;
-import com.hundredcommits.messengerx.notification.NotificationExecutor;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
 import com.hundredcommits.messengerx.repositories.UserRepository;
 import com.hundredcommits.messengerx.service.InvitationService;
 import com.hundredcommits.messengerx.service.UserService;
-import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,20 +21,17 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService, EventNotify<FriendRequestEvent> {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final InvitationService invitationService;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-    private final NotificationExecutor notificationExecutor;
-
-    public UserServiceImpl(UserRepository userRepository, InvitationService invitationService, PasswordEncoder encoder, JwtUtils jwtUtils, NotificationExecutor notificationExecutor) {
+    public UserServiceImpl(UserRepository userRepository, InvitationService invitationService, PasswordEncoder encoder, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.invitationService = invitationService;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
-        this.notificationExecutor = notificationExecutor;
     }
 
     @Override
@@ -98,22 +91,6 @@ public class UserServiceImpl implements UserService, EventNotify<FriendRequestEv
     }
 
     @Override
-    public void inviteFriend(String username) {
-        String authUser = SecurityUtils.getAuthenticatedUsername();
-        if (AppUtil.isEmpty(username) || username.equals(authUser)) {
-            log.warn("Provided name of user is empty or equals authenticated user name");
-            return;
-        }
-
-        InvitationDTO invitation = new InvitationDTO(authUser, username);
-        boolean saved = invitationService.saveInvitation(invitation);
-        if (saved) {
-            FriendRequestEvent event = new FriendRequestEvent(authUser, username);
-            notify(authUser, Set.of(username), event);
-        }
-    }
-
-    @Override
     public boolean responseForInvitation(boolean isAccepted, String username) {
         String authUserName = SecurityUtils.getAuthenticatedUsername();
         InvitationDTO invitationDTO = new InvitationDTO(username, authUserName);
@@ -160,16 +137,5 @@ public class UserServiceImpl implements UserService, EventNotify<FriendRequestEv
         }
 
         return false;
-    }
-
-    @Override
-    public void notify(String senderNotify, Set<String> recipientsNames, FriendRequestEvent event) {
-        List<String> errors = notificationExecutor.notify(senderNotify, recipientsNames, event);
-
-        if (!errors.isEmpty()){
-            for (String string : errors) {
-                //todo: obsłużyć wyjątki powstałe podczas przesyłania eventów
-            }
-        }
     }
 }

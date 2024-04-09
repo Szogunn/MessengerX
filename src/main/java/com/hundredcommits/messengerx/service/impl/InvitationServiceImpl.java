@@ -2,20 +2,30 @@ package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.Invitation;
 import com.hundredcommits.messengerx.dtos.InvitationDTO;
+import com.hundredcommits.messengerx.notification.EventNotify;
+import com.hundredcommits.messengerx.notification.FriendRequestEvent;
+import com.hundredcommits.messengerx.notification.NotificationExecutor;
 import com.hundredcommits.messengerx.repositories.InvitationRepository;
 import com.hundredcommits.messengerx.service.InvitationService;
+import com.hundredcommits.messengerx.utils.AppUtil;
+import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
-public class InvitationServiceImpl implements InvitationService {
+public class InvitationServiceImpl implements InvitationService, EventNotify<FriendRequestEvent> {
     private final InvitationRepository invitationRepository;
 
-    public InvitationServiceImpl(InvitationRepository invitationRepository) {
+    private final NotificationExecutor notificationExecutor;
+
+    public InvitationServiceImpl(InvitationRepository invitationRepository, NotificationExecutor notificationExecutor) {
         this.invitationRepository = invitationRepository;
+        this.notificationExecutor = notificationExecutor;
     }
 
     @Override
@@ -38,19 +48,27 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public boolean saveInvitation(InvitationDTO invitationDTO) {
+    public void inviteUser(String username) {
+        String authUser = SecurityUtils.getAuthenticatedUsername();
+        if (AppUtil.isEmpty(username) || username.equals(authUser)) {
+            log.warn("Provided name of user is empty or equals authenticated user name");
+            return;
+        }
+
+        InvitationDTO invitationDTO = new InvitationDTO(authUser, username);
         if (checkInvitationValid(invitationDTO)) {
-            return false;
+            return;
         }
 
         try {
             Invitation invitation = new Invitation(invitationDTO.fromUser(), invitationDTO.toUser());
             invitationRepository.save(invitation);
         } catch (Exception ex) {
-            return false;
+            return;
         }
 
-        return true;
+        FriendRequestEvent event = new FriendRequestEvent(authUser, username);
+        notify(authUser, Set.of(username), event);
     }
 
     @Override
@@ -62,5 +80,16 @@ public class InvitationServiceImpl implements InvitationService {
 
         Invitation invitation = optionalInvitation.get();
         return invitation.getResponseDate() == null;
+    }
+
+    @Override
+    public void notify(String senderNotify, Set<String> recipientsNames, FriendRequestEvent event) {
+        List<String> errors = notificationExecutor.notify(senderNotify, recipientsNames, event);
+
+        if (!errors.isEmpty()){
+            for (String string : errors) {
+                //todo: obsłużyć wyjątki powstałe podczas przesyłania eventów
+            }
+        }
     }
 }

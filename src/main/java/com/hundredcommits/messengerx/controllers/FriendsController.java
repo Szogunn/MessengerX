@@ -2,6 +2,7 @@ package com.hundredcommits.messengerx.controllers;
 
 import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
+import com.hundredcommits.messengerx.service.InvitationService;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.session.ActiveSessionManager;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
@@ -26,10 +27,12 @@ public class FriendsController {
 
     public static final String REDIRECT_FRIENDS = "redirect:/friends";
     private final UserService userService;
+    private final InvitationService invitationService;
     private final ActiveSessionManager activeSessionManager;
 
-    public FriendsController(UserService userService, ActiveSessionManager activeSessionManager) {
+    public FriendsController(UserService userService, InvitationService invitationService, ActiveSessionManager activeSessionManager) {
         this.userService = userService;
+        this.invitationService = invitationService;
         this.activeSessionManager = activeSessionManager;
     }
 
@@ -56,7 +59,7 @@ public class FriendsController {
 
     @PostMapping("/invite")
     public String inviteFriend(@ModelAttribute UserDTO userDTO) {
-        userService.inviteFriend(userDTO.username());
+        invitationService.inviteUser(userDTO.username());
 
         return REDIRECT_FRIENDS;
     }

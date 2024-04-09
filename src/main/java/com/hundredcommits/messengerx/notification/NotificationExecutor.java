@@ -37,7 +37,7 @@ public class NotificationExecutor {
             }
         }, () -> {
             log.info("No emitter for member {}", friend);
-            errors.add("no emitter");
+            errors.add("no emitter"); //todo zamiast dodawać informacje o errorach lepiej jest rzucić customwym wyjątkiem, który następnie trzeba obsłużyć używając tej metody
         }))); //tutaj mogę zaimplementować np zapisanie do bazy danyc powiadomienia zeby użytkownik mógł je odebrać po zalogowaniu się jeżeli nie jest aktywny
 
         return errors;
