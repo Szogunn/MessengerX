@@ -56,7 +56,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
         }
 
         InvitationDTO invitationDTO = new InvitationDTO(authUser, username);
-        if (checkInvitationValid(invitationDTO)) {
+        if (checkInvitationValid(authUser, username)) {
             return;
         }
 
@@ -71,9 +71,8 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
         notify(authUser, Set.of(username), event);
     }
 
-    @Override
-    public boolean checkInvitationValid(InvitationDTO invitationDTO) {
-        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(invitationDTO.fromUser(), invitationDTO.toUser());
+    public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
+        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(invitationFromUser, invitationToUser);
         if (optionalInvitation.isEmpty()) {
             return false;
         }

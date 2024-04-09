@@ -6,6 +6,5 @@ public interface InvitationService {
 
     boolean responseForInvitation(boolean isAccepted, InvitationDTO invitationDTO);
     void inviteUser(String username);
-    boolean checkInvitationValid(InvitationDTO invitationDTO);
 
 }
