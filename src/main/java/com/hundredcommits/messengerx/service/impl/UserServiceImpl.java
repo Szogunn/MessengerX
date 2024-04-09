@@ -1,7 +1,6 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.User;
-import com.hundredcommits.messengerx.dtos.InvitationDTO;
 import com.hundredcommits.messengerx.dtos.UserDTO;
 import com.hundredcommits.messengerx.jwt.JwtUtils;
 import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
@@ -93,8 +92,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean responseForInvitation(boolean isAccepted, String username) {
         String authUserName = SecurityUtils.getAuthenticatedUsername();
-        InvitationDTO invitationDTO = new InvitationDTO(username, authUserName);
-        boolean isValid = invitationService.responseForInvitation(isAccepted, invitationDTO);
+        boolean isValid = invitationService.responseForInvitation(isAccepted, username);
 
         if (isValid) {
 //            userRepository.findByUsername(authUserName).ifPresent(user -> user.getFriends().add(username));

@@ -1,7 +1,6 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.Invitation;
-import com.hundredcommits.messengerx.dtos.InvitationDTO;
 import com.hundredcommits.messengerx.notification.EventNotify;
 import com.hundredcommits.messengerx.notification.FriendRequestEvent;
 import com.hundredcommits.messengerx.notification.NotificationExecutor;
@@ -29,10 +28,11 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
     }
 
     @Override
-    public boolean responseForInvitation(boolean isAccepted, InvitationDTO invitationDTO) {
-        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(invitationDTO.fromUser(), invitationDTO.toUser());
+    public boolean responseForInvitation(boolean isAccepted, String inviteeUser) {
+        String invitedUser = SecurityUtils.getAuthenticatedUsername();
+        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(inviteeUser, invitedUser);
         if (optionalInvitation.isEmpty() || optionalInvitation.get().getResponseDate() != null){
-            log.error("Not found invitation with given information", invitationDTO);
+            log.error(String.format("Not found invitation from user %s to user %s.", inviteeUser, invitedUser));
             return false;
         }
 
@@ -48,27 +48,26 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
     }
 
     @Override
-    public void inviteUser(String username) {
+    public void inviteUser(String newFriendUsername) {
         String authUser = SecurityUtils.getAuthenticatedUsername();
-        if (AppUtil.isEmpty(username) || username.equals(authUser)) {
+        if (AppUtil.isEmpty(newFriendUsername) || newFriendUsername.equals(authUser)) {
             log.warn("Provided name of user is empty or equals authenticated user name");
             return;
         }
 
-        InvitationDTO invitationDTO = new InvitationDTO(authUser, username);
-        if (checkInvitationValid(authUser, username)) {
+        if (checkInvitationValid(authUser, newFriendUsername)) {
             return;
         }
 
         try {
-            Invitation invitation = new Invitation(invitationDTO.fromUser(), invitationDTO.toUser());
+            Invitation invitation = new Invitation(authUser, newFriendUsername);
             invitationRepository.save(invitation);
         } catch (Exception ex) {
             return;
         }
 
-        FriendRequestEvent event = new FriendRequestEvent(authUser, username);
-        notify(authUser, Set.of(username), event);
+        FriendRequestEvent event = new FriendRequestEvent(authUser, newFriendUsername);
+        notify(authUser, Set.of(newFriendUsername), event);
     }
 
     public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
