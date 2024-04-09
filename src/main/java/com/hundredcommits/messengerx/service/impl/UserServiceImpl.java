@@ -7,7 +7,6 @@ import com.hundredcommits.messengerx.payloads.JwtInfoResponse;
 import com.hundredcommits.messengerx.payloads.LoginRequest;
 import com.hundredcommits.messengerx.payloads.SignupRequest;
 import com.hundredcommits.messengerx.repositories.UserRepository;
-import com.hundredcommits.messengerx.service.InvitationService;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +21,11 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final InvitationService invitationService;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository, InvitationService invitationService, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
-        this.invitationService = invitationService;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
     }
@@ -70,7 +67,7 @@ public class UserServiceImpl implements UserService {
             exceptions.add(String.format("Użytkownik o nazwie %s nie został znaleziony", username));
             return false;
         }
-
+//        todo: zaimplementować metodę którą przyjmuję Consumera jako funkcję i będzie zapisywała wynik działania jakim jest User do bazy danych
         Optional<User> authenticatedUser = userRepository.findByUsername(SecurityUtils.getAuthenticatedUsername());
         if (authenticatedUser.isEmpty() || friend.getUsername().equals(authenticatedUser.get().getUsername())) {
             exceptions.add("Błąd");
@@ -87,30 +84,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean responseForInvitation(boolean isAccepted, String username) {
-        String authUserName = SecurityUtils.getAuthenticatedUsername();
-        boolean isValid = invitationService.responseForInvitation(isAccepted, username);
-
-        if (isValid) {
-//            userRepository.findByUsername(authUserName).ifPresent(user -> user.getFriends().add(username));
-//            userRepository.findByUsername(username).ifPresent(user -> user.getFriends().add(authUserName));
-//            todo: zaimplementować metodę którą przyjmuję Consumera jako funkcję i będzie zapisywała wynik działania jakim jest User do bazy danych
-            User friend = findUserByUsername(username);
-            User authenticatedUser = findUserByUsername(authUserName);
-            if (friend != null && authenticatedUser != null){
-                friend.getFriends().add(authUserName);
-                authenticatedUser.getFriends().add(username);
-                userRepository.saveAll(Set.of(friend, authenticatedUser));
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
     }
 
     @Override

@@ -66,7 +66,7 @@ public class FriendsController {
 
     @PostMapping("/response/{isAccepted}")
     public ResponseEntity<Boolean> responseForInvitation(@PathVariable String isAccepted, @RequestBody UserDTO userDTO) {
-        boolean result = userService.responseForInvitation(Boolean.parseBoolean(isAccepted), userDTO.username());
+        boolean result = invitationService.responseForInvitation(Boolean.parseBoolean(isAccepted), userDTO.username());
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 //        return REDIRECT_FRIENDS;

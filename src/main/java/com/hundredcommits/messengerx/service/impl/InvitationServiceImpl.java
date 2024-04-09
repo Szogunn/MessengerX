@@ -6,6 +6,7 @@ import com.hundredcommits.messengerx.notification.FriendRequestEvent;
 import com.hundredcommits.messengerx.notification.NotificationExecutor;
 import com.hundredcommits.messengerx.repositories.InvitationRepository;
 import com.hundredcommits.messengerx.service.InvitationService;
+import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.utils.AppUtil;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,14 @@ import java.util.Set;
 @Service
 @Slf4j
 public class InvitationServiceImpl implements InvitationService, EventNotify<FriendRequestEvent> {
+
+    private final UserService userService;
     private final InvitationRepository invitationRepository;
 
     private final NotificationExecutor notificationExecutor;
 
-    public InvitationServiceImpl(InvitationRepository invitationRepository, NotificationExecutor notificationExecutor) {
+    public InvitationServiceImpl(UserService userService, InvitationRepository invitationRepository, NotificationExecutor notificationExecutor) {
+        this.userService = userService;
         this.invitationRepository = invitationRepository;
         this.notificationExecutor = notificationExecutor;
     }
@@ -44,7 +48,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
             return false;
         }
 
-        return true;
+        return userService.addFriend(inviteeUser, List.of());
     }
 
     @Override
@@ -55,7 +59,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
             return;
         }
 
-        if (checkInvitationValid(authUser, newFriendUsername)) {
+        if (!checkInvitationValid(authUser, newFriendUsername)) {
             return;
         }
 
@@ -73,7 +77,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
     public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
         Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(invitationFromUser, invitationToUser);
         if (optionalInvitation.isEmpty()) {
-            return false;
+            return true;
         }
 
         Invitation invitation = optionalInvitation.get();
