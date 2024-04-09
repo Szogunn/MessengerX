@@ -42,18 +42,6 @@ public class FriendsController {
         return "friends/index";
     }
 
-    @PostMapping("/add")
-    public String addFriend(@ModelAttribute UserDTO userDTO, Model model) {
-        List<String> exceptions = new ArrayList<>();
-        userService.addFriend(userDTO.username(), exceptions);
-
-        if (!exceptions.isEmpty()){
-            model.addAttribute("exceptions", exceptions);
-        }
-
-        return REDIRECT_FRIENDS;
-    }
-
     @PostMapping("/remove")
     public String removeFriend(@ModelAttribute UserDTO userDTO, Model model) {
         List<String> exceptions = new ArrayList<>();
