@@ -76,8 +76,8 @@ public class Invitation extends PersistentNotifyingEntity {
         }
 
         this.accepted = accepted;
-        this.responseDate = new Date(System.currentTimeMillis());
         this.setCompleted();
+        this.responseDate = new Date(System.currentTimeMillis());
     }
 
     public Date getResponseDate() {

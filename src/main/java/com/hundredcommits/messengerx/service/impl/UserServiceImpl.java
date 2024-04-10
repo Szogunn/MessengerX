@@ -109,4 +109,9 @@ public class UserServiceImpl implements UserService {
 
         return false;
     }
+
+    @Override
+    public boolean isUsersAreFriends(String firstUser, String secondUser) {
+        return findUserFriendsName(firstUser).contains(secondUser);
+    }
 }

@@ -34,7 +34,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
     @Override
     public boolean responseForInvitation(boolean isAccepted, String inviteeUser) {
         String invitedUser = SecurityUtils.getAuthenticatedUsername();
-        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(inviteeUser, invitedUser);
+        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUserAndCompleted(inviteeUser, invitedUser, false);
         if (optionalInvitation.isEmpty() || optionalInvitation.get().getResponseDate() != null){
             log.error(String.format("Not found invitation from user %s to user %s.", inviteeUser, invitedUser));
             return false;
@@ -48,7 +48,11 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
             return false;
         }
 
-        return userService.addFriend(inviteeUser, List.of());
+        if (isAccepted){
+            userService.addFriend(inviteeUser, List.of());
+        }
+
+        return true;
     }
 
     @Override
@@ -75,13 +79,19 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
     }
 
     public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
-        Optional<Invitation> optionalInvitation = invitationRepository.findByFromUserAndToUser(invitationFromUser, invitationToUser);
-        if (optionalInvitation.isEmpty()) {
+        Optional<Invitation> existingInvitation = invitationRepository.findByFromUserAndToUserAndCompleted(invitationFromUser, invitationToUser, false);
+        if (existingInvitation.isEmpty()) {
+            log.debug("Invitation does not exist");
             return true;
         }
 
-        Invitation invitation = optionalInvitation.get();
-        return invitation.getResponseDate() == null;
+        Invitation invitation = existingInvitation.get();
+        if (invitation.getResponseDate() == null) {
+            log.debug("Invitation exist but has not been completed");
+            return true;
+        }
+
+        return !userService.isUsersAreFriends(invitationFromUser, invitationToUser);
     }
 
     @Override

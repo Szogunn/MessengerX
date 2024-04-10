@@ -17,4 +17,5 @@ public interface UserService {
     User findUserByUsername(String username);
     boolean addFriend(String username, List<String> exceptions);
     boolean removeFriend(String username, List<String> exceptions);
+    boolean isUsersAreFriends(String firstUser, String secondUser);
 }
