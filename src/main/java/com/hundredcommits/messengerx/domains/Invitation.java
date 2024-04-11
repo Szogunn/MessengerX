@@ -85,7 +85,7 @@ public class Invitation extends PersistentNotifyingEntity {
     }
 
     @Override
-    protected void setCompleted() {
+    public void setCompleted() {
         if (this.responseDate != null){
             return;
         }

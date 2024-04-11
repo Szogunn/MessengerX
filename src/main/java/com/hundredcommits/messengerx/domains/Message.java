@@ -14,6 +14,7 @@ public class Message extends PersistentNotifyingEntity {
     private String recipientId;
     private String content;
     private Date timestamp;
+    private Date readTimestamp;
 
     public Message(String senderId, String recipientId, String content, Date timestamp) {
         super(recipientId);
@@ -21,6 +22,7 @@ public class Message extends PersistentNotifyingEntity {
         this.recipientId = recipientId;
         this.content = content;
         this.timestamp = timestamp;
+        this.readTimestamp = null;
     }
 
     public String getId() {
@@ -72,7 +74,14 @@ public class Message extends PersistentNotifyingEntity {
     }
 
     @Override
-    void setCompleted() {
-        //todo
+    public void setCompleted() {
+        if (readTimestamp == null) {
+            this.completed = true;
+            this.readTimestamp = new Date(System.currentTimeMillis());
+        }
+    }
+
+    public Date getReadTimestamp() {
+        return readTimestamp;
     }
 }

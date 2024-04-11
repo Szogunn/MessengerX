@@ -10,7 +10,7 @@ public abstract class PersistentNotifyingEntity {
         this.completed = false;
     }
 
-    abstract void setCompleted();
+    public abstract void setCompleted();
 
     public boolean getCompleted(){
         return this.completed;
