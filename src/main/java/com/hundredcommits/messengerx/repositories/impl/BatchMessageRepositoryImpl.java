@@ -52,7 +52,7 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
             readMessages.stream()
                     .map(Message::getId)
                     .forEach(messagesIdBatch::remove);
-            log.info("Updated {} messages in the database", messages.size());
+            log.info("Updated {} messages in the database", readMessages.size());
         }
     }
 
