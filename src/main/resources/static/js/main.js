@@ -45,11 +45,16 @@ function connect() {
             var parsedMessage = JSON.parse(message.body);
             if (selectedUser && parsedMessage.senderId === selectedUser){
                 showMessage(parsedMessage.content, parsedMessage.senderId, false)
+                markMessagesAsRead(parsedMessage.messageId)
             } else {
                 showNotification(parsedMessage.senderId);
             }
         });
     })
+}
+
+function markMessagesAsRead(messageIds) {
+    client.send("/app/readMessages", {}, messageIds);
 }
 
 function sendMessage() {

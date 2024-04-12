@@ -1,6 +1,7 @@
 package com.hundredcommits.messengerx.dtos;
 
-public record NotificationDTO(
+public record MessageDTO(
+        String messageId,
         String content,
         String senderId
         ) {

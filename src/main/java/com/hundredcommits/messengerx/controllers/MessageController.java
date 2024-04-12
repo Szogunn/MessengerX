@@ -1,7 +1,7 @@
 package com.hundredcommits.messengerx.controllers;
 
 import com.hundredcommits.messengerx.domains.Message;
-import com.hundredcommits.messengerx.dtos.NotificationDTO;
+import com.hundredcommits.messengerx.dtos.MessageDTO;
 import com.hundredcommits.messengerx.jwt.UserDetailsImpl;
 import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
 import com.hundredcommits.messengerx.service.MessageService;
@@ -57,8 +57,8 @@ public class MessageController {
         }
 
         Message savedMessage = messageService.save(chatMessage);
-        NotificationDTO notification = new NotificationDTO(savedMessage.getContent(), savedMessage.getSenderId());
-        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", notification);
+        MessageDTO message = new MessageDTO(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSenderId());
+        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", message);
     }
 
     @GetMapping("/messages/{recipientId}")
@@ -67,5 +67,10 @@ public class MessageController {
         MessagesPageResponse messages = messageService.findChatMessages(senderId, recipientId, pageNo, pageSize);
 
         return ResponseEntity.ok(messages);
+    }
+
+    @MessageMapping("/readMessages")
+    public void handleReadMessages(@Payload String readMessageIds, SimpMessageHeaderAccessor headerAccessor) {
+        messageService.markMessagesAsRead(readMessageIds);
     }
 }
