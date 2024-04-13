@@ -1,13 +1,9 @@
 package com.hundredcommits.messengerx.domains;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Conversation {
-
-    @Id
-    private String id;
+public class Conversation extends BaseEntity {
     private String chatId;
     private String userOneId;
     private String userTwoId;
@@ -16,14 +12,6 @@ public class Conversation {
         this.chatId = chatId;
         this.userOneId = userOneId;
         this.userTwoId = userTwoId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getChatId() {

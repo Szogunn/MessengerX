@@ -1,6 +1,6 @@
 package com.hundredcommits.messengerx.domains;
 
-public abstract class PersistentNotifyingEntity {
+public abstract class PersistentNotifyingEntity extends BaseEntity {
 
     protected String notificationDestinationUser;
     protected boolean completed;

@@ -1,15 +1,11 @@
 package com.hundredcommits.messengerx.domains;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 @Document
 public class Invitation extends PersistentNotifyingEntity {
-
-    @Id
-    private String id;
     private final Date invitationDate;
     private final String fromUser;
     private final String toUser;
