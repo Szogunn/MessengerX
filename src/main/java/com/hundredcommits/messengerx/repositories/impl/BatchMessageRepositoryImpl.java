@@ -31,6 +31,7 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
     @Override
     public void addMessageToBatch(String messageId) {
         messagesIdBatch.add(messageId);
+        // todo: ustawianie tego w ten sposób spowoduje że godzina odczytania będzie zawsze opóźniona, Powinienem przekazać wraz z message czas w jakim został on odczytany
     }
 
     @Override

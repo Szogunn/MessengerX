@@ -20,4 +20,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");
         registry.setApplicationDestinationPrefixes("/app");
     }
+    //todo dodać jakiś interceptor, który będzie sprawdzał połączenie i rozłączenie się z websocket. Można zastąpić nim listenery do logowania i wylogowywania się z aplikacji
 }
