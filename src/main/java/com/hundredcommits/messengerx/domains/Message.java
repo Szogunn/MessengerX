@@ -14,7 +14,7 @@ public class Message extends PersistentNotifyingEntity {
     private Date readTimestamp;
 
     public Message(String senderId, String recipientId, String content, Date timestamp) {
-        super(recipientId);
+        super(recipientId, senderId);
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.content = content;

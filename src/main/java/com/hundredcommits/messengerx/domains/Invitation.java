@@ -13,14 +13,14 @@ public class Invitation extends PersistentNotifyingEntity {
     private Date responseDate;
 
     private Invitation() {
-        super(null);
+        super(null, null);
         this.invitationDate = null;
         this.fromUser = null;
         this.toUser = null;
     }
 
     public Invitation(String fromUser, String toUser) {
-        super(toUser);
+        super(toUser, fromUser);
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.invitationDate = new Date(System.currentTimeMillis());
@@ -29,7 +29,7 @@ public class Invitation extends PersistentNotifyingEntity {
     }
 
     private Invitation(String id, String fromUser, String toUser, Date invitationDate, boolean accepted, Date responseDate) {
-        super(toUser);
+        super(toUser, fromUser);
         this.id = id;
         this.fromUser = fromUser;
         this.toUser = toUser;
