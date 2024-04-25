@@ -47,7 +47,8 @@ function connect() {
                 showMessage(parsedMessage.content, parsedMessage.senderId, false)
                 markMessagesAsRead(parsedMessage.messageId)
             } else {
-                showNotification(parsedMessage.senderId);
+                // showNotification(parsedMessage.senderId);
+                updateMessageNotificationBadge(+1, parsedMessage.senderId)
             }
         });
     })
@@ -174,6 +175,14 @@ function sendResponseToServer(isAccepted, username) {
 function updateNotificationBadge(change) {
     const notificationBadge = document.getElementById('notificationBadge');
     let currentCount = parseInt(notificationBadge.textContent);
+    currentCount += change;
+    notificationBadge.textContent = currentCount;
+}
+
+function updateMessageNotificationBadge(change, user) {
+    const notificationBadge = document.getElementById('messageBadge-' + user);
+    let currentCount = parseInt(notificationBadge.textContent);
+    console.log(notificationBadge.textContent)
     currentCount += change;
     notificationBadge.textContent = currentCount;
 }
