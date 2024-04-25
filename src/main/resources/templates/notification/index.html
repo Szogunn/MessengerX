@@ -10,11 +10,17 @@
 <ul class="list-group">
     <li th:each="notification : ${notifications}" class="list-group-item">
         <div class="d-flex justify-content-between align-items-center">
-            <span th:text="${notification.notificationDestinationUser}"></span>
+            <span th:text="${notification.notificationSenderUser}"></span>
             <span th:text="${notification.completed}"></span>
             <span th:text="${notification.id}"></span>
+            <span th:text="${notification.persistentNotifyType}"></span>
+            <span th:if = "${notification.persistentNotifyType.name().equals('INVITATION')}">
+                <button class="accept-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendResponseToServer(true, this.getAttribute('data-from-user'))">Accept</button>
+                <button class="reject-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendResponseToServer(false, this.getAttribute('data-from-user'))">Reject</button>
+            </span>
         </div>
     </li>
 </ul>
+<script src="/js/main.js"></script>
 </body>
 </html>

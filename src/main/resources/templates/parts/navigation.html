@@ -9,21 +9,14 @@
              class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-bell"></i>
-                        <span class="badge badge-danger" id="notificationBadge">0</span> <!-- Dodany badge z liczbą powiadomień -->
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" id="notificationList">
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div sec:authentication="name" id="authenticated-username"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/notification/unread">Notifications</a>
+                        <a class="dropdown-item" th:href="@{/notification/unread}">
+                            <span class="badge badge-danger" id="notificationBadge">0</span>Notifications
+                        </a>
                         <a class="dropdown-item" href="#">Profile</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <div class="dropdown-divider"></div>
