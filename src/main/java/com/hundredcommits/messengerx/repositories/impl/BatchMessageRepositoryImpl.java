@@ -57,6 +57,11 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
         }
     }
 
+    @Override
+    public Set<String> getMessagesIdsFromBatch() {
+        return messagesIdBatch;
+    }
+
     private void markMessagesInBatchAsRead() {
         if (messagesIdBatch.isEmpty()) {
             return;
