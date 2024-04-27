@@ -40,6 +40,7 @@ oraz poszerzenie wiedzy o Spring MVC.
   -  [ ] Informacje o przyjęciu lub odrzuceniu zaproszenia jako powiadomienie (przeprocesowanie jako odczytanie - kliknięcie)
   -  [ ] Dedykowane okno do wyświetlenia nie przeprocesowanych powiadomień
   -  [X] Powiadomienie o zmianie statusu użytkownika
+  -  [ ] Powiadomienie o przychodzącej wiadomości od użytkownika z którym aktualnie nie chatuje 
 
 ### Nice-to-have:
 
