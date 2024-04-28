@@ -2,7 +2,9 @@ package com.hundredcommits.messengerx.controllers;
 
 import com.hundredcommits.messengerx.payloads.FriendStatus;
 import com.hundredcommits.messengerx.dtos.UserDTO;
+import com.hundredcommits.messengerx.payloads.UnreadMessagesFromFriend;
 import com.hundredcommits.messengerx.service.InvitationService;
+import com.hundredcommits.messengerx.service.MessageService;
 import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.session.ActiveSessionManager;
 import com.hundredcommits.messengerx.utils.SecurityUtils;
@@ -29,11 +31,13 @@ public class FriendsController {
     private final UserService userService;
     private final InvitationService invitationService;
     private final ActiveSessionManager activeSessionManager;
+    private final MessageService messageService;
 
-    public FriendsController(UserService userService, InvitationService invitationService, ActiveSessionManager activeSessionManager) {
+    public FriendsController(UserService userService, InvitationService invitationService, ActiveSessionManager activeSessionManager, MessageService messageService) {
         this.userService = userService;
         this.invitationService = invitationService;
         this.activeSessionManager = activeSessionManager;
+        this.messageService = messageService;
     }
 
     @GetMapping("")
@@ -42,6 +46,8 @@ public class FriendsController {
         Set<FriendStatus> friends = activeSessionManager.findUserFriendsWithStatus(username);
 
         model.addAttribute("friends", friends);
+        Set<UnreadMessagesFromFriend> unreadMessagesFromFriends = messageService.countUnreadMessagesPerFriend(username);
+        model.addAttribute("unreadMessages", unreadMessagesFromFriends);
         return "friends/index";
     }
 

@@ -2,6 +2,7 @@ package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.Message;
 import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
+import com.hundredcommits.messengerx.payloads.UnreadMessagesFromFriend;
 import com.hundredcommits.messengerx.repositories.MessageRepository;
 import com.hundredcommits.messengerx.repositories.impl.BatchMessageRepositoryImpl;
 import com.hundredcommits.messengerx.service.ConversationService;
@@ -12,6 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -56,5 +62,20 @@ public class MessageServiceImpl implements MessageService {
         if (!AppUtil.isEmpty(messageId)) {
             batchMessageRepository.addMessageToBatch(messageId);
         }
+    }
+
+    @Override
+    public Set<UnreadMessagesFromFriend> countUnreadMessagesPerFriend(String recipientId) {
+        if (AppUtil.isEmpty(recipientId)) {
+            return Set.of();
+        }
+
+        List<Message> unreadMessagesFromDB = messageRepository.findAllByRecipientIdAndCompleted(recipientId, false);
+        Set<String> messagesIdsFromBatch = batchMessageRepository.getMessagesIdsFromBatch();
+        unreadMessagesFromDB.removeIf(el -> messagesIdsFromBatch.contains(el.getId()));
+
+        Map<String, Long> unreadMessagesFromFriend = unreadMessagesFromDB.stream().collect(Collectors.groupingBy(Message::getSenderId, Collectors.counting()));
+        //        unreadMessagesFromDB.stream().collect(Collectors.groupingBy(Message::getSenderId, UnreadMessagesFromFriend::new, Collectors.counting()));
+        return unreadMessagesFromFriend.entrySet().stream().map(el -> new UnreadMessagesFromFriend(el.getKey(), el.getValue())).collect(Collectors.toSet());
     }
 }
