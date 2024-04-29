@@ -69,7 +69,7 @@ public class MessageController {
         return ResponseEntity.ok(messages);
     }
 
-    @MessageMapping("/readMessages")
+    @MessageMapping("/readMessages") //todo: zamiast korzystać z messageMapping można używać zwykłego posta do którego będą wysyłane informacje o przeczytynach wiadomościach
     public void handleReadMessages(@Payload String readMessageIds, SimpMessageHeaderAccessor headerAccessor) {
         messageService.markMessagesAsRead(readMessageIds);
     }
