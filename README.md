@@ -24,11 +24,6 @@ oraz poszerzenie wiedzy o Spring MVC.
 - [X] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości prywatnych.
 - [X] Implementacja logiki serwera obsługującej wymianę wiadomości między użytkownikami.
 
-**Chatowanie grupowe:**
-
-- [ ] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
-- [ ] Implementacja logiki serwera obsługującej wiadomości w grupach.
-
 **Dostęp do starych wiadomości:**
 
 - [X] Implementacja logiki serwera obsługującej dostęp do starych wiadomości bez wyszukiwania.
@@ -43,6 +38,10 @@ oraz poszerzenie wiedzy o Spring MVC.
   -  [ ] Powiadomienie o przychodzącej wiadomości od użytkownika z którym aktualnie nie chatuje 
 
 ### Nice-to-have:
+**Chatowanie grupowe:**
+
+- [ ] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
+- [ ] Implementacja logiki serwera obsługującej wiadomości w grupach.
 
 **Użytkownicy posiadający role na czatach:**
 
