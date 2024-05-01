@@ -92,7 +92,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 ## Pomocne linki
 
-- https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372 (architektura)
+- https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372 (architektura systemu)
 
 ### Licencja
 
