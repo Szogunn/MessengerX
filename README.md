@@ -99,4 +99,4 @@ oraz poszerzenie wiedzy o Spring MVC.
 Ten projekt jest objęty licencją MIT - sprawdź plik `LICENSE` dla szczegółów.
 
 ---
-Autor: Mateusz
+Autor: Mateusz Boczek
