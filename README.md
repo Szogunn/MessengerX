@@ -1,5 +1,4 @@
 # MessengerX
-
 ## Opis
 
 Aplikacja MessengerX jest platformą do komunikacji między użytkownikami poprzez chaty.
