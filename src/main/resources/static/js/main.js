@@ -183,6 +183,9 @@ function updateMessageNotificationBadge(change, user) {
     const notificationBadge = document.getElementById('messageBadge-' + user);
     let currentCount = parseInt(notificationBadge.textContent);
     console.log(notificationBadge.textContent)
+    if (isNaN(currentCount)) {
+        currentCount = 0; // Przypisanie wartości 0, jeśli currentCount jest NaN
+    }
     currentCount += change;
     notificationBadge.textContent = currentCount;
 }
