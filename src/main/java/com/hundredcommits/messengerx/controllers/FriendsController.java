@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/friends")
@@ -46,7 +45,9 @@ public class FriendsController {
         Set<FriendStatus> friends = activeSessionManager.findUserFriendsWithStatus(username);
 
         model.addAttribute("friends", friends);
-        Set<UnreadMessagesFromFriend> unreadMessagesFromFriends = messageService.countUnreadMessagesPerFriend(username);
+        Map<String, Long> unreadMessagesFromFriends = messageService.countUnreadMessagesPerFriend(username)
+                .stream()
+                .collect(Collectors.toMap(UnreadMessagesFromFriend::getUsername, UnreadMessagesFromFriend::getUnreadMessages));
         model.addAttribute("unreadMessages", unreadMessagesFromFriends);
         return "friends/index";
     }

@@ -9,4 +9,12 @@ public class UnreadMessagesFromFriend {
         this.username = username;
         this.unreadMessages = unreadMessages;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Long getUnreadMessages() {
+        return unreadMessages;
+    }
 }
