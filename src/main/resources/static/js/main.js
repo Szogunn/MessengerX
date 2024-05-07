@@ -83,6 +83,9 @@ function handleClick(element) {
     chatArea.innerHTML = '';
     fetchAndDisplayUserChat(20).then();
     console.log('Username:', selectedUser);
+
+    const currentUserDiv = document.getElementById('currentUser');
+    currentUserDiv.textContent = selectedUser;
 }
 
 function subscribeToNotifications() {
