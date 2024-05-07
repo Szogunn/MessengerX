@@ -7,6 +7,7 @@ import com.hundredcommits.messengerx.repositories.MessageRepository;
 import com.hundredcommits.messengerx.repositories.impl.BatchMessageRepositoryImpl;
 import com.hundredcommits.messengerx.service.ConversationService;
 import com.hundredcommits.messengerx.service.MessageService;
+import com.hundredcommits.messengerx.service.UserService;
 import com.hundredcommits.messengerx.utils.AppUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +26,23 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final ConversationService conversationService;
     private final BatchMessageRepositoryImpl batchMessageRepository;
+    private final UserService userService;
 
-    public MessageServiceImpl(MessageRepository messageRepository, ConversationService conversationService, BatchMessageRepositoryImpl batchMessageRepository) {
+    public MessageServiceImpl(MessageRepository messageRepository, ConversationService conversationService, BatchMessageRepositoryImpl batchMessageRepository, UserService userService) {
         this.messageRepository = messageRepository;
         this.conversationService = conversationService;
         this.batchMessageRepository = batchMessageRepository;
+        this.userService = userService;
     }
 
     @Override
     public Message save(Message message) {
         if (message == null){
+            return null;
+        }
+
+        boolean isFriends = userService.isUsersAreFriends(message.getSenderId(), message.getRecipientId());
+        if (!isFriends){
             return null;
         }
 

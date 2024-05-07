@@ -57,8 +57,10 @@ public class MessageController {
         }
 
         Message savedMessage = messageService.save(chatMessage);
-        MessageDTO message = new MessageDTO(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSenderId());
-        webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", message);
+        if (savedMessage != null) {
+            MessageDTO message = new MessageDTO(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSenderId());
+            webSocket.convertAndSendToUser(chatMessage.getRecipientId(), "/queue/messages", message);
+        }
     }
 
     @GetMapping("/messages/{recipientId}")
