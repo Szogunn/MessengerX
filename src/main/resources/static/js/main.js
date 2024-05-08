@@ -126,7 +126,7 @@ function addFriendInvitationNotificationToList(notification) {
     acceptButton.textContent = 'Akceptuj';
     acceptButton.classList.add('btn', 'btn-success', 'mx-2');
     acceptButton.addEventListener('click', function() {
-        sendResponseToServer(true, notification); // Wysyłanie akceptacji na serwer
+        sendInvitationResponse(true, notification); // Wysyłanie akceptacji na serwer
     });
 
     // Przycisk odrzucenia
@@ -134,7 +134,7 @@ function addFriendInvitationNotificationToList(notification) {
     rejectButton.textContent = 'Odrzuć';
     rejectButton.classList.add('btn', 'btn-danger');
     rejectButton.addEventListener('click', function() {
-        sendResponseToServer(false, notification); // Wysyłanie odrzucenia na serwer
+        sendInvitationResponse(false, notification); // Wysyłanie odrzucenia na serwer
     });
 
     // Dodaj treść i przyciski do powiadomienia
@@ -147,7 +147,7 @@ function addFriendInvitationNotificationToList(notification) {
 }
 
 // Funkcja do wysyłania odpowiedzi na serwer
-function sendResponseToServer(isAccepted, username) {
+function sendInvitationResponse(isAccepted, username) {
     console.log(isAccepted)
     console.log(username)
     fetch(`/friends/response/${isAccepted}`, {

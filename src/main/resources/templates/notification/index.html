@@ -15,8 +15,8 @@
             <span th:text="${notification.id}"></span>
             <span th:text="${notification.persistentNotifyType}"></span>
             <span th:if = "${notification.persistentNotifyType.name().equals('INVITATION')}">
-                <button class="accept-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendResponseToServer(true, this.getAttribute('data-from-user'))">Accept</button>
-                <button class="reject-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendResponseToServer(false, this.getAttribute('data-from-user'))">Reject</button>
+                <button class="accept-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendInvitationResponse(true, this.getAttribute('data-from-user'))">Accept</button>
+                <button class="reject-btn" th:data-from-user="${notification.notificationSenderUser}" onclick="sendInvitationResponse(false, this.getAttribute('data-from-user'))">Reject</button>
             </span>
         </div>
     </li>
