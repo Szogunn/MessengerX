@@ -76,6 +76,5 @@ public class FriendsController {
         boolean result = invitationService.responseForInvitation(Boolean.parseBoolean(isAccepted), userDTO.username());
 
         return new ResponseEntity<>(result, HttpStatus.OK);
-//        return REDIRECT_FRIENDS;
     }
 }
