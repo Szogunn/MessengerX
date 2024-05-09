@@ -45,7 +45,8 @@ function connect() {
             var parsedMessage = JSON.parse(message.body);
             if (selectedUser && parsedMessage.senderId === selectedUser){
                 showMessage(parsedMessage.content, parsedMessage.senderId, false)
-                markMessagesAsRead(parsedMessage.messageId)
+                // markMessagesAsRead(parsedMessage.messageId)
+                markMessageAsRead(parsedMessage.messageId, new Date())
             } else {
                 // showNotification(parsedMessage.senderId);
                 updateMessageNotificationBadge(+1, parsedMessage.senderId)
@@ -157,6 +158,35 @@ function sendInvitationResponse(isAccepted, username) {
         },
         body: JSON.stringify({
             username: username
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Obsługa odpowiedzi z serwera
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+}
+
+function markMessageAsRead(messageId, time) {
+    var date = new Date(time)
+    console.log(messageId)
+    console.log(date)
+    fetch(`/readMessages2`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            messageId: messageId,
+            readTimestamp: date
         })
     })
         .then(response => {

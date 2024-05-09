@@ -72,7 +72,7 @@ public class Invitation extends PersistentNotifyingEntity {
         }
 
         this.accepted = accepted;
-        this.setCompleted();
+        this.setCompleted(new Date());
         this.responseDate = new Date(System.currentTimeMillis());
     }
 
@@ -81,7 +81,7 @@ public class Invitation extends PersistentNotifyingEntity {
     }
 
     @Override
-    public void setCompleted() {
+    public void setCompleted(Date date) {
         if (this.responseDate != null){
             return;
         }

@@ -2,6 +2,7 @@ package com.hundredcommits.messengerx.controllers;
 
 import com.hundredcommits.messengerx.domains.Message;
 import com.hundredcommits.messengerx.dtos.MessageDTO;
+import com.hundredcommits.messengerx.dtos.ReadMessageDTO;
 import com.hundredcommits.messengerx.jwt.UserDetailsImpl;
 import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
 import com.hundredcommits.messengerx.service.MessageService;
@@ -15,9 +16,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -71,8 +70,13 @@ public class MessageController {
         return ResponseEntity.ok(messages);
     }
 
-    @MessageMapping("/readMessages") //todo: zamiast korzystać z messageMapping można używać zwykłego posta do którego będą wysyłane informacje o przeczytynach wiadomościach
-    public void handleReadMessages(@Payload String readMessageIds, SimpMessageHeaderAccessor headerAccessor) {
-        messageService.markMessagesAsRead(readMessageIds);
+//    @MessageMapping("/readMessages") //todo: zamiast korzystać z messageMapping można używać zwykłego posta do którego będą wysyłane informacje o przeczytynach wiadomościach
+//    public void handleReadMessages(@Payload String readMessageIds, SimpMessageHeaderAccessor headerAccessor) {
+//        messageService.markMessagesAsRead(readMessageIds);
+//    }
+
+    @PostMapping("/readMessages2")
+    public void handleReadMessage(@RequestBody ReadMessageDTO readMessageDTO) {
+        messageService.markMessagesAsRead(readMessageDTO.messageId(), readMessageDTO.readTimestamp());
     }
 }

@@ -15,9 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,14 +63,16 @@ public class MessageServiceImpl implements MessageService {
         }
 
         Page<Message> messages = messageRepository.findByConversationId(conversationId.get(), pageable);
-        batchMessageRepository.markMessagesAsRead(messages.getContent());
+        Map<Message, Date> messagesWithReadTimestamp = messages.getContent()
+                .stream().collect(Collectors.toMap(Function.identity(), v -> new Date(System.currentTimeMillis())));
+        batchMessageRepository.markMessagesAsRead(messagesWithReadTimestamp);
         return new MessagesPageResponse(messages.getContent(), pageable.getPageNumber(), pageable.getPageSize(), messages.getTotalElements(), messages.getTotalPages(), messages.isLast());
     }
 
     @Override
-    public void markMessagesAsRead(String messageId) {
+    public void markMessagesAsRead(String messageId, Date date) {
         if (!AppUtil.isEmpty(messageId)) {
-            batchMessageRepository.addMessageToBatch(messageId);
+            batchMessageRepository.addMessageToBatch(messageId, date);
         }
     }
 

@@ -63,10 +63,10 @@ public class Message extends PersistentNotifyingEntity {
     }
 
     @Override
-    public void setCompleted() {
+    public void setCompleted(Date date) {
         if (readTimestamp == null) {
             this.completed = true;
-            this.readTimestamp = new Date(System.currentTimeMillis());
+            this.readTimestamp = date;
         }
     }
 

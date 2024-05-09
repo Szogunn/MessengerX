@@ -7,18 +7,16 @@ import com.hundredcommits.messengerx.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class BatchMessageRepositoryImpl implements BatchMessageRepository {
 
-    private final Set<String> messagesIdBatch = new CopyOnWriteArraySet<>();
+    private final Map<String, Date> messagesIdBatch = new ConcurrentHashMap<>();
     private final MessageRepository messageRepository;
     private final ScheduledExecutorService scheduler;
 
@@ -29,9 +27,8 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
     }
 
     @Override
-    public void addMessageToBatch(String messageId) {
-        messagesIdBatch.add(messageId);
-        // todo: ustawianie tego w ten sposób spowoduje że godzina odczytania będzie zawsze opóźniona, Powinienem przekazać wraz z message czas w jakim został on odczytany
+    public void addMessageToBatch(String messageId, Date date) {
+        messagesIdBatch.put(messageId, date);
     }
 
     @Override
@@ -40,12 +37,14 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
     }
 
     @Override
-    public void markMessagesAsRead(List<Message> messages) {
+    public void markMessagesAsRead(Map<Message, Date> messages) {
         String authRecipientUser = SecurityUtils.getAuthenticatedUsername();
-        List<Message> readMessages = messages.stream()
-                .filter(message -> !message.getCompleted())
-                .filter(message -> message.getRecipientId().equals(authRecipientUser))
-                .peek(Message::setCompleted)
+        List<Message> readMessages = messages.entrySet()
+                .stream()
+                .filter(message -> !message.getKey().getCompleted())
+                .filter(message -> message.getKey().getRecipientId().equals(authRecipientUser))
+                .peek(message -> message.getKey().setCompleted(message.getValue()))
+                .map(Map.Entry::getKey)
                 .toList();
 
         if (!readMessages.isEmpty()) {
@@ -59,7 +58,7 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
 
     @Override
     public Set<String> getMessagesIdsFromBatch() {
-        return messagesIdBatch;
+        return messagesIdBatch.keySet();
     }
 
     private void markMessagesInBatchAsRead() {
@@ -67,9 +66,11 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
             return;
         }
 
-        List<Message> messagesFromBatch = messageRepository.findAllById(messagesIdBatch);
+        List<Message> messagesFromBatch = messageRepository.findAllById(messagesIdBatch.keySet());
         if (!messagesFromBatch.isEmpty()) {
-            markMessagesAsRead(messagesFromBatch);
+            Map<Message, Date> messageDateMap = messagesFromBatch.stream()
+                    .collect(Collectors.toMap(Function.identity(), v -> messagesIdBatch.get(v.getId())));
+            markMessagesAsRead(messageDateMap);
             this.messagesIdBatch.clear();
         }
     }

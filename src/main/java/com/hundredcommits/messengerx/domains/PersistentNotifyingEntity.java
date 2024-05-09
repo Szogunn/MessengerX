@@ -1,5 +1,7 @@
 package com.hundredcommits.messengerx.domains;
 
+import java.util.Date;
+
 public abstract class PersistentNotifyingEntity extends BaseEntity {
 
     protected String notificationDestinationUser;
@@ -14,7 +16,7 @@ public abstract class PersistentNotifyingEntity extends BaseEntity {
         this.persistentNotifyType = persistentNotifyType;
     }
 
-    public abstract void setCompleted();
+    public abstract void setCompleted(Date date);
 
     public boolean getCompleted(){
         return this.completed;
