@@ -39,13 +39,15 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
     @Override
     public void markMessagesAsRead(Map<Message, Date> messages) {
         String authRecipientUser = SecurityUtils.getAuthenticatedUsername();
-        List<Message> readMessages = messages.entrySet()
+        List<Message> readMessages = new ArrayList<>();
+        messages.entrySet()
                 .stream()
                 .filter(message -> !message.getKey().getCompleted())
-                .filter(message -> message.getKey().getRecipientId().equals(authRecipientUser))
-                .peek(message -> message.getKey().setCompleted(message.getValue()))
-                .map(Map.Entry::getKey)
-                .toList();
+                .filter(message -> authRecipientUser == null || message.getKey().getRecipientId().equals(authRecipientUser))
+                .forEach(mapMessageWithReadTimestamp -> {
+                    mapMessageWithReadTimestamp.getKey().setCompleted(mapMessageWithReadTimestamp.getValue());
+                    readMessages.add(mapMessageWithReadTimestamp.getKey());
+                });
 
         if (!readMessages.isEmpty()) {
             messageRepository.saveAll(readMessages);
@@ -71,7 +73,6 @@ public class BatchMessageRepositoryImpl implements BatchMessageRepository {
             Map<Message, Date> messageDateMap = messagesFromBatch.stream()
                     .collect(Collectors.toMap(Function.identity(), v -> messagesIdBatch.get(v.getId())));
             markMessagesAsRead(messageDateMap);
-            this.messagesIdBatch.clear();
         }
     }
 }
