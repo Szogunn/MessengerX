@@ -3,6 +3,7 @@ package com.hundredcommits.messengerx.service.impl;
 import com.hundredcommits.messengerx.domains.Message;
 import com.hundredcommits.messengerx.payloads.MessagesPageResponse;
 import com.hundredcommits.messengerx.payloads.UnreadMessagesFromFriend;
+import com.hundredcommits.messengerx.repositories.BatchMessageRepository;
 import com.hundredcommits.messengerx.repositories.MessageRepository;
 import com.hundredcommits.messengerx.repositories.impl.BatchMessageRepositoryImpl;
 import com.hundredcommits.messengerx.service.ConversationService;
@@ -27,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final ConversationService conversationService;
-    private final BatchMessageRepositoryImpl batchMessageRepository;
+    private final BatchMessageRepository batchMessageRepository;
     private final UserService userService;
 
     public MessageServiceImpl(MessageRepository messageRepository, ConversationService conversationService, BatchMessageRepositoryImpl batchMessageRepository, UserService userService) {
