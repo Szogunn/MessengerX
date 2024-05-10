@@ -76,7 +76,8 @@ public class MessageController {
 //    }
 
     @PostMapping("/readMessages2")
-    public void handleReadMessage(@RequestBody ReadMessageDTO readMessageDTO) {
+    public ResponseEntity<String> handleReadMessage(@RequestBody ReadMessageDTO readMessageDTO) {
         messageService.markMessagesAsRead(readMessageDTO.messageId(), readMessageDTO.readTimestamp());
+        return ResponseEntity.ok(String.format("Message %s marked as read" , readMessageDTO.messageId()));
     }
 }
