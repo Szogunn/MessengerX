@@ -45,18 +45,12 @@ function connect() {
             var parsedMessage = JSON.parse(message.body);
             if (selectedUser && parsedMessage.senderId === selectedUser){
                 showMessage(parsedMessage.content, parsedMessage.senderId, false)
-                // markMessagesAsRead(parsedMessage.messageId)
                 markMessageAsRead(parsedMessage.messageId, new Date())
             } else {
-                // showNotification(parsedMessage.senderId);
                 updateMessageNotificationBadge(+1, parsedMessage.senderId)
             }
         });
     })
-}
-
-function markMessagesAsRead(messageIds) {
-    client.send("/app/readMessages", {}, messageIds);
 }
 
 function sendMessage() {
@@ -72,10 +66,6 @@ function sendMessage() {
     client.send("/app/chat", {}, JSON.stringify(message));
     showMessage(message.content, message.senderId, false);
     document.getElementById('messageToSend').value = "";
-}
-
-function showNotification(senderId) {
-    alert("Nowa wiadomość od użytkownika: " + senderId);
 }
 
 function handleClick(element) {
