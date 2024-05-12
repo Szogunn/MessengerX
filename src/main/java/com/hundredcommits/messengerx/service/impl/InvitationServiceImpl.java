@@ -1,9 +1,7 @@
 package com.hundredcommits.messengerx.service.impl;
 
 import com.hundredcommits.messengerx.domains.Invitation;
-import com.hundredcommits.messengerx.notification.EventNotify;
-import com.hundredcommits.messengerx.notification.FriendRequestEvent;
-import com.hundredcommits.messengerx.notification.NotificationExecutor;
+import com.hundredcommits.messengerx.notification.*;
 import com.hundredcommits.messengerx.repositories.InvitationRepository;
 import com.hundredcommits.messengerx.service.InvitationService;
 import com.hundredcommits.messengerx.service.UserService;
@@ -14,21 +12,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Slf4j
-public class InvitationServiceImpl implements InvitationService, EventNotify<FriendRequestEvent> {
+public class InvitationServiceImpl implements InvitationService {
 
     private final UserService userService;
     private final InvitationRepository invitationRepository;
 
-    private final NotificationExecutor notificationExecutor;
+    private final EventNotify eventNotify;
 
-    public InvitationServiceImpl(UserService userService, InvitationRepository invitationRepository, NotificationExecutor notificationExecutor) {
+    public InvitationServiceImpl(UserService userService, InvitationRepository invitationRepository, EventNotify eventNotify) {
         this.userService = userService;
         this.invitationRepository = invitationRepository;
-        this.notificationExecutor = notificationExecutor;
+        this.eventNotify = eventNotify;
     }
 
     @Override
@@ -52,6 +49,8 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
             userService.addFriend(inviteeUser, List.of());
         }
 
+        FriendResponseEvent friendResponseEvent = new FriendResponseEvent(inviteeUser, invitedUser, isAccepted);
+        sendFriendResponseEvent(friendResponseEvent);
         return true;
     }
 
@@ -75,7 +74,7 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
         }
 
         FriendRequestEvent event = new FriendRequestEvent(authUser, newFriendUsername);
-        notify(authUser, Set.of(newFriendUsername), event);
+        sendFriendRequestEvent(event);
     }
 
     public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
@@ -88,20 +87,19 @@ public class InvitationServiceImpl implements InvitationService, EventNotify<Fri
         Invitation invitation = existingInvitation.get();
         if (invitation.getResponseDate() == null) {
             log.debug("Invitation exist but has not been completed");
-            return true;
+            return false;
         }
 
         return !userService.isUsersAreFriends(invitationFromUser, invitationToUser);
     }
 
     @Override
-    public void notify(String senderNotify, Set<String> recipientsNames, FriendRequestEvent event) {
-        List<String> errors = notificationExecutor.notify(senderNotify, recipientsNames, event);
+    public void sendFriendRequestEvent(FriendRequestEvent event) {
+        eventNotify.notify(event);
+    }
 
-        if (!errors.isEmpty()){
-            for (String string : errors) {
-                //todo: obsłużyć wyjątki powstałe podczas przesyłania eventów
-            }
-        }
+    @Override
+    public void sendFriendResponseEvent(FriendResponseEvent event) {
+        eventNotify.notify(event);
     }
 }

@@ -6,16 +6,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
-public class NotificationExecutor {
+public class NotificationExecutor implements EventNotify {
     private final ThreadPoolExecutor notifyPool;
     private final EmitterRepository emitterRepository;
 
@@ -24,22 +21,18 @@ public class NotificationExecutor {
         notifyPool = new ThreadPoolExecutor(1, 5, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(100));
     }
 
-    public List<String> notify(String senderNotify, Set<String> recipientsNames, Event event) {
-        List<String> errors = new ArrayList<>();
-        notifyPool.submit(() -> recipientsNames.forEach(friend -> emitterRepository.get(friend).ifPresentOrElse(sseEmitter -> {
+    @Override
+    public void notify(Event event) {
+        notifyPool.submit(() -> event.getRecipientsNames().forEach(friend -> emitterRepository.get(friend).ifPresentOrElse(sseEmitter -> {
             try {
-                log.info(String.format("Sending event: %s from member: %s to member: %s", event.getType(), senderNotify, friend));
+                log.info(String.format("Sending event: %s from member: %s to member: %s", event.getType(), event.getSender(), friend));
                 sseEmitter.send(SseEmitter.event().name(friend).data(event));
             } catch (IOException | IllegalStateException e) {
                 log.error("Error while sending event: {} for member: {} - exception: {}", event.getType(), friend, e);
                 emitterRepository.remove(friend);
-                errors.add("");
             }
         }, () -> {
-            log.info("No emitter for member {}", friend);
-            errors.add("no emitter"); //todo zamiast dodawać informacje o errorach lepiej jest rzucić customwym wyjątkiem, który następnie trzeba obsłużyć używając tej metody
-        }))); //tutaj mogę zaimplementować np zapisanie do bazy danyc powiadomienia zeby użytkownik mógł je odebrać po zalogowaniu się jeżeli nie jest aktywny
-
-        return errors;
+            log.info("No emitter for member {}", friend);//todo zamiast dodawać informacje o errorach lepiej jest rzucić customwym wyjątkiem, który następnie trzeba obsłużyć używając tej metody
+        })));
     }
 }

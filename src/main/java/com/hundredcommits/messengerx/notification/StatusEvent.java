@@ -1,27 +1,18 @@
 package com.hundredcommits.messengerx.notification;
 
-import com.hundredcommits.messengerx.utils.AppUtil;
+import java.util.Set;
 
 public class StatusEvent extends Event {
-    private final String username;
-    private final boolean online;
-    public StatusEvent(String username, boolean online) {
-        super(EventType.USER_STATUS);
 
-        if (!AppUtil.isEmpty(username)) {
-            this.username = username;
-            this.online = online;
-        } else {
-            this.username = "";
-            this.online = false;
-        }
+    private final boolean online;
+
+    public StatusEvent(String fromUser, Set<String> recipientsNames, boolean online) {
+        super(fromUser, recipientsNames, EventType.USER_STATUS);
+        this.online = online;
     }
 
     public boolean isOnline() {
         return online;
     }
 
-    public String getUsername() {
-        return username;
-    }
 }

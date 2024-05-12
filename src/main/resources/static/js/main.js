@@ -85,11 +85,11 @@ function subscribeToNotifications() {
     eventSource.addEventListener(nickname, function (event) {
         const eventData = JSON.parse(event.data);
         if (eventData.type === 'USER_STATUS') {
-            updateUserStatus(eventData.username, eventData.online);
+            updateUserStatus(eventData.sender, eventData.online);
         }
 
         if (eventData.type === 'FRIEND_REQUEST') {
-            addFriendInvitationNotificationToList(eventData.fromUser);
+            addFriendInvitationNotificationToList(eventData.sender);
             updateNotificationBadge(+1);
         }
     });
