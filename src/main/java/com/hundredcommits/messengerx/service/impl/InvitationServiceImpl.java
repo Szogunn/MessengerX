@@ -62,7 +62,7 @@ public class InvitationServiceImpl implements InvitationService {
             return;
         }
 
-        if (!checkInvitationValid(authUser, newFriendUsername)) {
+        if (!checkInvitationInvalid(authUser, newFriendUsername)) {
             return;
         }
 
@@ -77,7 +77,7 @@ public class InvitationServiceImpl implements InvitationService {
         sendFriendRequestEvent(event);
     }
 
-    public boolean checkInvitationValid(String invitationFromUser, String invitationToUser) {
+    public boolean checkInvitationInvalid(String invitationFromUser, String invitationToUser) {
         Optional<Invitation> existingInvitation = invitationRepository.findByFromUserAndToUserAndCompleted(invitationFromUser, invitationToUser, false);
         if (existingInvitation.isEmpty()) {
             log.debug("Invitation does not exist");
