@@ -62,7 +62,7 @@ public class InvitationServiceImpl implements InvitationService {
             return;
         }
 
-        if (!checkInvitationInvalid(authUser, newFriendUsername)) {
+        if (checkInvitationInvalid(authUser, newFriendUsername)) {
             return;
         }
 
@@ -81,16 +81,16 @@ public class InvitationServiceImpl implements InvitationService {
         Optional<Invitation> existingInvitation = invitationRepository.findByFromUserAndToUserAndCompleted(invitationFromUser, invitationToUser, false);
         if (existingInvitation.isEmpty()) {
             log.debug("Invitation does not exist");
-            return true;
+            return false;
         }
 
         Invitation invitation = existingInvitation.get();
         if (invitation.getResponseDate() == null) {
             log.debug("Invitation exist but has not been completed");
-            return false;
+            return true;
         }
 
-        return !userService.isUsersAreFriends(invitationFromUser, invitationToUser);
+        return userService.isUsersAreFriends(invitationFromUser, invitationToUser);
     }
 
     @Override
