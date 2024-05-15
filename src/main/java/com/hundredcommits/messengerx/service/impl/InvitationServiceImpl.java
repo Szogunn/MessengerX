@@ -49,7 +49,7 @@ public class InvitationServiceImpl implements InvitationService {
             userService.addFriend(inviteeUser, List.of());
         }
 
-        FriendResponseEvent friendResponseEvent = new FriendResponseEvent(inviteeUser, invitedUser, isAccepted);
+        FriendResponseEvent friendResponseEvent = new FriendResponseEvent(invitedUser, inviteeUser, isAccepted);
         sendFriendResponseEvent(friendResponseEvent);
         return true;
     }
