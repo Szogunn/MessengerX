@@ -29,10 +29,10 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 **Wysyłanie powiadomień:**
 
-- [ ] Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
+- [X] Konfiguracja mechanizmu wysyłania powiadomień na podstawie określonych zdarzeń lub aktywności użytkowników.
   -  [X] Zaproszenie do znajmomych
-  -  [ ] Informacje o przyjęciu lub odrzuceniu zaproszenia jako powiadomienie (przeprocesowanie jako odczytanie - kliknięcie)
-  -  [ ] Dedykowane okno do wyświetlenia nie przeprocesowanych powiadomień
+  -  [X] Informacje o przyjęciu lub odrzuceniu zaproszenia jako powiadomienie (przeprocesowanie jako odczytanie - kliknięcie)
+  -  [X] Dedykowane okno do wyświetlenia nie przeprocesowanych powiadomień
   -  [X] Powiadomienie o zmianie statusu użytkownika
   -  [X] Powiadomienie o przychodzącej wiadomości od użytkownika z którym aktualnie nie chatuje 
 
