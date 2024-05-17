@@ -89,10 +89,6 @@ oraz poszerzenie wiedzy o Spring MVC.
 - [Wyszukiwarki (np. Elasticsearch)](https://www.elastic.co/) : Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych
   konwersacjach
 
-## Pomocne linki
-
-- https://medium.com/@m.romaniiuk/system-design-chat-application-1d6fbf21b372
-
 ### Licencja
 
 Ten projekt jest objęty licencją MIT - sprawdź plik `LICENSE` dla szczegółów.
