@@ -6,7 +6,7 @@ Umożliwia tworzenie konwersacji grupowych oraz indywidualnych, wysyłanie powia
 
 ## Motywacja
 
-Motywacją do podjęcia tematyki chatowania jest chęć zapoznania się z systemami czasu rzeczywsitego jak WebSockets, SSE
+Motywacją do podjęcia tematyki projektu jest chęć zapoznania się z systemami czasu rzeczywsitego jak WebSockets, SSE
 oraz poszerzenie wiedzy o Spring MVC.
 
 ## Funkcjonalności
