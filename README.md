@@ -37,6 +37,7 @@ oraz poszerzenie wiedzy o Spring MVC.
   -  [X] Powiadomienie o przychodzącej wiadomości od użytkownika z którym aktualnie nie chatuje 
 
 ### Nice-to-have:
+
 **Chatowanie grupowe:**
 
 - [ ] Stworzenie interfejsu użytkownika do wysyłania i odbierania wiadomości w grupach.
