@@ -62,7 +62,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 **Wyszukiwanie w starych konwersacjach:**
 
-- [ ] Implementacja funkcji wyszukiwania w archiwalnych rozmowach.
+- [ ] Implementacja funkcji wyszukiwania w archiwalnych rozmowach z wykorzystaniem silnika do wyszukiwania jak Elasticsearch.
 - [ ] Stworzenie interfejsu użytkownika umożliwiającego wyszukiwanie w starych wiadomościach.
 
 **Zewnętrzny broker:**
