@@ -89,6 +89,13 @@ oraz poszerzenie wiedzy o Spring MVC.
 - [Thymeleaf](https://www.thymeleaf.org/) : Prosta warstwa fronentdowa z wykorzystaniem silnika Thymeleaf
 - [Wyszukiwarki (np. Elasticsearch)](https://www.elastic.co/) : Biblioteka pomocnicza do efektywnego wyszukiwania elementów w starych
   konwersacjach
+  
+## Budowanie i uruchamianie aplikacji
+Aby zbudować projekt i uruchomić aplikację, wykonaj poniższe polecenia w terminalu:
+```mvn clean install``` 
+```mvn spring-boot:run```
+
+Po pomyślnym uruchomieniu aplikacja będzie dostępna pod adresem: http://localhost:8080
 
 ### Licencja
 
