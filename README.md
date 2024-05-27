@@ -91,9 +91,17 @@ oraz poszerzenie wiedzy o Spring MVC.
   konwersacjach
   
 ## Budowanie i uruchamianie aplikacji
-Aby zbudować projekt i uruchomić aplikację, wykonaj poniższe polecenia w terminalu:
+**Aby zbudować projekt i uruchomić aplikację, wykonaj poniższe polecenia w terminalu:**
+
 ```mvn clean install``` 
+
 ```mvn spring-boot:run```
+
+**Alternatywnie, możesz użyć pliku JAR do uruchomienia aplikacji:**
+
+```mvn clean package```
+
+```java -jar target/MessengerX.jar```
 
 Po pomyślnym uruchomieniu aplikacja będzie dostępna pod adresem: http://localhost:8080
 
