@@ -10,7 +10,6 @@ Motywacją do podjęcia tematyki projektu jest chęć zapoznania się z systemam
 oraz poszerzenie wiedzy o Spring MVC.
 
 ## Funkcjonalności
-
 ### Must-have:
 
 **Rejestracja oraz logowanie:**
