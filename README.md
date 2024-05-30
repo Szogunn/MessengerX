@@ -74,7 +74,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 ## Technologie
 
-- [Java 21](https://openjdk.org/projects/jdk/21/) : Język programowania, w którym napisana będzie główna logika aplikacji.
+- [Java 17](https://openjdk.org/projects/jdk/21/) : Język programowania, w którym napisana będzie główna logika aplikacji.
 - [Maven](https://maven.apache.org/) : Automatyzacja budowy projektów opartych o język Java
 - [Spring Framework](https://spring.io/projects/spring-framework) : Framework do tworzenia aplikacji Java, który zapewnia wsparcie dla budowania aplikacji webowych, obsługi żądań HTTP i zarządzania zależnościami.
 - [Spring Boot 3](https://spring.io/projects/spring-boot) : Ułatwia szybkie tworzenie aplikacji Spring, zapewniając konfigurację domyślną i automatyczne
