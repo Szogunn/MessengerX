@@ -1,6 +1,4 @@
-# MessengerX
-## Opis
-
+# MessengerX 
 Aplikacja MessengerX jest platformą do komunikacji między użytkownikami z wykorzystaniem systemów czasu rzeczywistego.
 Umożliwia wysyłanie zaproszeń do znajomych, a następnie tworzenie konwersacji indywidualnych. Umożliwa przeglądanie historii wiadomości pomiędzy użytkownikami
 
