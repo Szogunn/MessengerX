@@ -93,7 +93,7 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 ```mvn spring-boot:run```
 
-**Alternatywnie, możesz użyć pliku JAR do uruchomienia aplikacji:**
+**Alternatywnie, możliwe jest użycie pliku JAR do uruchomienia aplikacji:**
 
 ```mvn clean package```
 
