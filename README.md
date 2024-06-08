@@ -23,7 +23,8 @@ oraz poszerzenie wiedzy o Spring MVC.
 
 **Dostęp do starych wiadomości:**
 
-- [X] Implementacja logiki serwera obsługującej dostęp do starych wiadomości bez wyszukiwania.
+- [X] Umożliwienie przegladania historycznych wiadomosci.
+- [X] Ilość nieodczytanych wiadomości sygnalizowana przy oknie konwersacji.
 
 **Wysyłanie powiadomień:**
 
